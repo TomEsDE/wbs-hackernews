@@ -32,12 +32,13 @@ export default function HackerNewsList() {
     <div>
       <HackerNav />
       {!newsList && <FaSpinner />}
-      {newsList?.hits?.map((news) => (
-        <>
-          <HackerNews key={news.story_id} news={news} />
-          <br />
-        </>
-      ))}
+      {newsList &&
+        newsList?.hits?.map((news, index) => (
+          <>
+            <HackerNews key={news.objectID} news={news} />
+            <br />
+          </>
+        ))}
     </div>
   );
 }

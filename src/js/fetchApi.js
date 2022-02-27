@@ -7,7 +7,7 @@ class HackerFetchApi {
   }
 
   async searchByDate(
-    tags = new Tags(),
+    tags = [Tags.STORY],
     numericFilters = new NumericFilters(),
     page = 0
   ) {
@@ -15,7 +15,7 @@ class HackerFetchApi {
   }
 
   async searchByDefault(
-    tags = new Tags(),
+    tags = [Tags.STORY],
     numericFilters = new NumericFilters(),
     page = 0
   ) {
@@ -46,30 +46,37 @@ class HackerFetchApi {
   }
 
   buildQuery(searchVariant, tags, numericFilters, page) {
-    let queryUrl = this.url + searchVariant;
-    console.log('queryUrl: ', queryUrl);
-    // todo tags
+    let queryUrl = this.url + searchVariant + '?';
+
+    // todo tags -> author and storyid different
+    if (tags.length) {
+      queryUrl += `tags=(${tags})`;
+    }
 
     // todo numericFilters
+    // ...
 
     // todo page
+    // ...
 
+    console.log('queryUrl: ', queryUrl);
     return queryUrl;
+    // return '';
   }
 }
-
-class Tags {
-  constructor() {
-    this.story = '';
-    this.comment = '';
-    this.poll = '';
-    this.pollopt = '';
-    this.show_hn = '';
-    this.ask_hn = '';
-    this.front_page = '';
-    this.author = '';
-    this.story = '';
-  }
+const Tags = {
+  STORY: 'story',
+  COMMENT: 'comment',
+  POLL: 'poll',
+  POLLOPT: 'pollopt',
+  SHOW_HN: 'show_hn',
+  ASK_HN: 'ask_hn',
+  FRONT_PAGE: 'front_page',
+  AUTHOR: 'author_',
+  STORYID: 'story_',
+};
+class Tag {
+  constructor() {}
 }
 
 class NumericFilters {
