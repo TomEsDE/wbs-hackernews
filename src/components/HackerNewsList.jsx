@@ -1,11 +1,24 @@
 import React, { useEffect, useState } from 'react';
+import HackerFetchApi from '../js/fetchApi';
 import HackerNav from './HackerNav';
 import HackerNews from './HackerNewsElement';
+import { FaSpinner } from 'react-icons/fa';
 
 export default function HackerNewsList() {
-  const [newsList, setNewsList] = useState([{}]);
+  const _api = new HackerFetchApi();
+  const [newsList, setNewsList] = useState(null);
   const [query, setQuery] = useState();
   const [page, setPage] = useState(1);
+
+  useEffect(() => {
+    // console.log('api: ', _api);
+    setNewsList(null);
+    _api?.searchByDate().then((data) => setNewsList(data));
+  }, []);
+
+  useEffect(() => {
+    console.log('newsList: ', newsList);
+  }, [newsList]);
 
   useEffect(() => {
     // fetch data...
@@ -15,19 +28,15 @@ export default function HackerNewsList() {
     };
   }, [query, page]);
 
-  useEffect(() => {
-    // todo
-
-    return () => {
-      // clean
-    };
-  }, [newsList]);
-
   return (
     <div>
       <HackerNav />
-      {newsList.map((news) => (
-        <HackerNews />
+      {!newsList && <FaSpinner />}
+      {newsList?.hits?.map((news) => (
+        <>
+          <HackerNews key={news.story_id} news={news} />
+          <br />
+        </>
       ))}
     </div>
   );
