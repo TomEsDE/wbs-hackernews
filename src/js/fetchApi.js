@@ -1,13 +1,16 @@
 import mock from './hackernews.json';
 
-console.log(mock);
 class HackerFetchApi {
   // todo ENV
   constructor(url = 'http://hn.algolia.com/api/v1/') {
     this.url = url;
   }
 
-  async getMockData() {
+  getMockDataSync() {
+    return mock;
+  }
+
+  async getMockData(time = 1000) {
     // zu Testzwecken ein Delay (für loading-symbol)
     async function loadMock(time) {
       return new Promise((resolve) => {
@@ -19,7 +22,7 @@ class HackerFetchApi {
     }
 
     // delay-Promise aufrufen und abwarten (await -> funktioniert nur in asynchronen Funktionen)
-    await loadMock(2000);
+    await loadMock(time);
     console.log('waited!');
 
     // asynchrone Funktionen liefern IMMER ein Promise (kann dann mit '.then()' aufgelöst werden)
@@ -27,24 +30,38 @@ class HackerFetchApi {
   }
 
   async searchByDate(
+    query = '',
     tags = [Tags.STORY],
     numericFilters = new NumericFilters(),
     page = 0
   ) {
-    return this.search(searchVariant.BY_DATE, tags, numericFilters, page);
+    return this.search(
+      query,
+      searchVariant.BY_DATE,
+      tags,
+      numericFilters,
+      page
+    );
   }
 
   async searchByDefault(
+    query = '',
     tags = [Tags.STORY],
     numericFilters = new NumericFilters(),
     page = 0
   ) {
-    return this.search(searchVariant.DEFAULT, tags, numericFilters, page);
+    return this.search(
+      query,
+      searchVariant.DEFAULT,
+      tags,
+      numericFilters,
+      page
+    );
   }
 
-  async search(searchVariant, tags, numericFilters, page) {
+  async search(query, searchVariant, tags, numericFilters, page) {
     const resp = await fetch(
-      this.buildQuery(searchVariant, tags, numericFilters, page)
+      this.buildQuery(query, searchVariant, tags, numericFilters, page)
     );
 
     // console.log('resp: ', resp);
@@ -57,12 +74,19 @@ class HackerFetchApi {
     }
   }
 
-  buildQuery(searchVariant, tags, numericFilters, page) {
+  buildQuery(query, searchVariant, tags, numericFilters, page) {
     let queryUrl = this.url + searchVariant + '?';
+
+    console.table({ query, searchVariant, tags, numericFilters, page });
+
+    // input search
+    if (query?.trim().length) {
+      queryUrl += `query=${query}`;
+    }
 
     // todo tags -> author and storyid different
     if (tags.length) {
-      queryUrl += `tags=(${tags})`;
+      queryUrl += `&tags=(${tags})`;
     }
 
     // todo numericFilters
@@ -70,6 +94,9 @@ class HackerFetchApi {
 
     // todo page
     // ...
+    if (page) {
+      queryUrl += `&page=${page}`;
+    }
 
     // todo additional parameters like number-of-hits-per-page etc
 

@@ -1,24 +1,32 @@
-import React, { useEffect, useState } from 'react';
-import HackerFetchApi from '../js/fetchApi';
+import React, { useEffect, useRef, useState } from 'react';
+import HackerFetchApi, { Tags } from '../js/fetchApi';
 import HackerNav from './HackerNav';
 import HackerNews from './HackerNewsElement';
 import { FaSpinner } from 'react-icons/fa';
+import Pagination from './Pagination';
 
 export default function HackerNewsList() {
   const _api = new HackerFetchApi();
   const [newsList, setNewsList] = useState(null);
-  const [query, setQuery] = useState();
-  const [page, setPage] = useState(1);
+  // const [page, setPage] = useState(1);
+
+  const query = useRef('');
+  const page = useRef('');
 
   function loadData() {
     // trigger render for loading symbol
     setNewsList(null);
 
     // ! mock data
-    _api?.getMockData().then((data) => setNewsList(data));
+    // _api?.getMockData(1000).then((data) => setNewsList(data));
 
     // ! real data
-    // _api?.searchByDate().then((data) => setNewsList(data));
+    _api
+      ?.searchByDate(query.current, [Tags.STORY], null, page.current)
+      .then((data) => {
+        setNewsList(data);
+        page.current = data.page;
+      });
   }
 
   // load data initially
@@ -30,22 +38,40 @@ export default function HackerNewsList() {
     console.log('newsList: ', newsList);
   }, [newsList]);
 
-  useEffect(() => {
-    // fetch data...
+  // useEffect(() => {
+  //   // fetch data...
+  //   console.log('useEffect >>> page: ', page);
+  //   loadData();
 
-    return () => {
-      // todo
-    };
-  }, [query, page]);
+  //   return () => {
+  //     // todo
+  //   };
+  // }, [page]);
+
+  function setQueryData(queryParam) {
+    console.log('query: ', queryParam);
+    query.current = queryParam;
+    loadData(queryParam);
+  }
+
+  function setPage(pageParam) {
+    page.current = pageParam;
+    loadData();
+  }
 
   return (
     <div>
-      <HackerNav />
+      <HackerNav setQuery={setQueryData} />
       <br />
-      <button onClick={loadData}>load data</button>
+      <Pagination
+        key="1"
+        page={page.current}
+        nbPages={newsList?.nbPages}
+        hitsPerPage={newsList?.hitsPerPage}
+        setPage={setPage}
+      />
       <br />
-      <br />
-      {!newsList && <FaSpinner />}
+      {!newsList && <FaSpinner size={70} />}
       {newsList &&
         newsList?.hits?.map((news, index) => (
           <>
@@ -54,6 +80,13 @@ export default function HackerNewsList() {
           </>
         ))}
       <br />
+      <Pagination
+        key="2"
+        page={page}
+        nbPages={newsList?.nbPages}
+        hitsPerPage={newsList?.hitsPerPage}
+        setPage={setPage}
+      />
     </div>
   );
 }

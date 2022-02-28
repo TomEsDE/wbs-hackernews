@@ -1,3 +1,83 @@
 .App {
+  padding: 1rem;
+  text-align: left;
+  background: lightgoldenrodyellow;
+}
+
+.headernav-div {
+  padding: 0.6rem;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(to left top, coral, purple);
+}
+
+.header-logo {
+  background: red;
+  width: 3rem;
+  color: aliceblue;
+  align-self: center;
   text-align: center;
+  padding: 5px;
+  font-size: 16pt;
+}
+
+.header-search-form {
+  flex-grow: 1;
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.headernav-input-search {
+  padding: 5px;
+  font-size: larger;
+  margin-right: 0.5rem;
+  flex-grow: 1;
+}
+
+.headernav-button-search {
+  padding: 5px;
+  font-size: larger;
+  margin-right: 0.5rem;
+}
+
+.news-div {
+  border-bottom: 1px dotted gray;
+}
+
+.news-div-link-div {
+  display: flex;
+}
+
+.news-div-link {
+  cursor: pointer;
+  border: none;
+  background: inherit;
+  margin-right: 1rem;
+}
+
+.news-div-link-origin {
+  margin-top: 0.2rem;
+  margin-right: 0.5rem;
+}
+
+.news-div-infos {
+  display: flex;
+  gap: 0.5rem;
+  font-size: 9pt;
+  color: cornflowerblue;
+}
+
+.news-div-infos-comments {
+  cursor: pointer;
+}
+
+.news-div-infos-comments:hover {
+  color: blue;
+}
+
+.pagination-div {
+  display: flex;
+  gap: 0.5rem;
 }
