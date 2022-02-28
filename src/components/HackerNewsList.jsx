@@ -25,7 +25,7 @@ export default function HackerNewsList() {
       ?.searchByDate(query.current, [Tags.STORY], null, page.current)
       .then((data) => {
         setNewsList(data);
-        page.current = data.page;
+        page.current = +data.page;
       });
   }
 
@@ -51,18 +51,24 @@ export default function HackerNewsList() {
   function setQueryData(queryParam) {
     console.log('query: ', queryParam);
     query.current = queryParam;
+    page.current = 0;
     loadData(queryParam);
   }
 
   function setPage(pageParam) {
+    if (pageParam < 0) {
+      pageParam = 0;
+    } else if (pageParam > newsList.nbPages) {
+      pageParam = newsList.nbPages - 1;
+    }
     page.current = pageParam;
     loadData();
   }
 
   return (
     <div>
-      <HackerNav setQuery={setQueryData} />
-      <br />
+      <HackerNav setQuery={setQueryData} newsList={newsList} />
+
       <Pagination
         key="1"
         page={page.current}
@@ -70,19 +76,17 @@ export default function HackerNewsList() {
         hitsPerPage={newsList?.hitsPerPage}
         setPage={setPage}
       />
-      <br />
+
       {!newsList && <FaSpinner size={70} />}
       {newsList &&
         newsList?.hits?.map((news, index) => (
           <>
             <HackerNews key={news.objectID} news={news} />
-            <br />
           </>
         ))}
-      <br />
       <Pagination
         key="2"
-        page={page}
+        page={page.current}
         nbPages={newsList?.nbPages}
         hitsPerPage={newsList?.hitsPerPage}
         setPage={setPage}

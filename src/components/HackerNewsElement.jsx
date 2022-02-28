@@ -1,7 +1,13 @@
-import React from 'react';
-import { FaLocationArrow } from 'react-icons/fa';
+import React, { useState } from 'react';
+import {
+  FaLocationArrow,
+  FaLongArrowAltDown,
+  FaRegArrowAltCircleDown,
+} from 'react-icons/fa';
 
 export default function HackerNews({ news }) {
+  const [showStory, setShowStory] = useState(false);
+
   function handleShowNews(event) {
     event.preventDefault();
     console.log('handleShowNews >> id: ', news.objectID);
@@ -10,6 +16,11 @@ export default function HackerNews({ news }) {
 
   function showComments(event) {
     console.log('showComments');
+  }
+
+  function showStoryText(event) {
+    console.log('showStoryText', news.story_text);
+    setShowStory(!showStory);
   }
 
   /**
@@ -28,14 +39,26 @@ export default function HackerNews({ news }) {
   return (
     <div className="news-div">
       <div className="news-div-link-div">
-        <a
-          className="news-div-link-origin"
-          href={news.url}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <FaLocationArrow size={20} />
-        </a>
+        {news.url && (
+          <a
+            className="news-div-link-origin"
+            href={news.url}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <FaLocationArrow size={20} />
+          </a>
+        )}
+        {news.story_text && (
+          <div
+            className="news-div-infos-comments"
+            onClick={showStoryText}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <FaLocationArrow className="arrow-turn" size={20} />
+          </div>
+        )}
         <div className="news-div-link" onClick={handleShowNews}>
           {news?.title}
         </div>
@@ -56,6 +79,12 @@ export default function HackerNews({ news }) {
         )}
         {!news.num_comments && <div>{news.num_comments} comments</div>}
       </div>
+      {showStory && (
+        <div
+          className="news-div-story"
+          dangerouslySetInnerHTML={{ __html: news.story_text }}
+        ></div>
+      )}
     </div>
   );
 }
