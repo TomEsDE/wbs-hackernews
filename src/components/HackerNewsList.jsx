@@ -13,7 +13,8 @@ export default function HackerNewsList() {
   useEffect(() => {
     // console.log('api: ', _api);
     setNewsList(null);
-    _api?.searchByDate().then((data) => setNewsList(data));
+    _api?.getMockData().then((data) => setNewsList(data));
+    // _api?.searchByDate().then((data) => setNewsList(data));
   }, []);
 
   useEffect(() => {

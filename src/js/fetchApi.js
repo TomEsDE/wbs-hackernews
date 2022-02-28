@@ -1,9 +1,22 @@
+import mock from './hackernews.json';
+
+console.log(mock);
 class HackerFetchApi {
   // todo ENV
   constructor(url = 'http://hn.algolia.com/api/v1/') {
     this.url = url;
-    this.searchByDateVariant = 'search_by_date';
-    this.searchByDefaultVariant = 'search';
+  }
+
+  async getMockData() {
+    // zu Testzwecken ein Delay (für loading-symbol)
+    const loadMock = async (time) =>
+      setTimeout(() => {
+        //... wait
+      }, time);
+
+    await loadMock(2000);
+
+    return mock;
   }
 
   async searchByDate(
@@ -11,7 +24,7 @@ class HackerFetchApi {
     numericFilters = new NumericFilters(),
     page = 0
   ) {
-    return this.search(this.searchByDateVariant, tags, numericFilters, page);
+    return this.search(searchVariant.BY_DATE, tags, numericFilters, page);
   }
 
   async searchByDefault(
@@ -19,20 +32,12 @@ class HackerFetchApi {
     numericFilters = new NumericFilters(),
     page = 0
   ) {
-    return this.search(this.searchByDefaultVariant, tags, numericFilters, page);
+    return this.search(searchVariant.DEFAULT, tags, numericFilters, page);
   }
 
   async search(searchVariant, tags, numericFilters, page) {
     const resp = await fetch(
-      this.buildQuery(searchVariant, tags, numericFilters, page),
-      {
-        method: 'GET',
-        // mode: 'cors',
-        // headers: {
-        //   'Content-Type': 'application/json',
-        // 'Access-Control-Allow-Origin': '*',
-        // },
-      }
+      this.buildQuery(searchVariant, tags, numericFilters, page)
     );
 
     // console.log('resp: ', resp);
@@ -59,11 +64,19 @@ class HackerFetchApi {
     // todo page
     // ...
 
-    console.log('queryUrl: ', queryUrl);
+    // todo additional parameters like number-of-hits-per-page etc
+
+    console.log('>>>> queryUrl: ', queryUrl);
     return queryUrl;
     // return '';
   }
 }
+
+const searchVariant = {
+  BY_DATE: 'search_by_date',
+  DEFAULT: 'search',
+};
+
 const Tags = {
   STORY: 'story',
   COMMENT: 'comment',
@@ -75,6 +88,7 @@ const Tags = {
   AUTHOR: 'author_',
   STORYID: 'story_',
 };
+
 class Tag {
   constructor() {}
 }
