@@ -9,13 +9,20 @@ class HackerFetchApi {
 
   async getMockData() {
     // zu Testzwecken ein Delay (für loading-symbol)
-    const loadMock = async (time) =>
-      setTimeout(() => {
-        //... wait
-      }, time);
+    async function loadMock(time) {
+      return new Promise((resolve) => {
+        console.log('...wait');
+        setTimeout(() => {
+          resolve('resolved');
+        }, time);
+      });
+    }
 
+    // delay-Promise aufrufen und abwarten (await -> funktioniert nur in asynchronen Funktionen)
     await loadMock(2000);
+    console.log('waited!');
 
+    // asynchrone Funktionen liefern IMMER ein Promise (kann dann mit '.then()' aufgelöst werden)
     return mock;
   }
 

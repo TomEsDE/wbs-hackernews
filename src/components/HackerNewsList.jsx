@@ -10,11 +10,20 @@ export default function HackerNewsList() {
   const [query, setQuery] = useState();
   const [page, setPage] = useState(1);
 
-  useEffect(() => {
-    // console.log('api: ', _api);
+  function loadData() {
+    // trigger render for loading symbol
     setNewsList(null);
+
+    // ! mock data
     _api?.getMockData().then((data) => setNewsList(data));
+
+    // ! real data
     // _api?.searchByDate().then((data) => setNewsList(data));
+  }
+
+  // load data initially
+  useEffect(() => {
+    loadData();
   }, []);
 
   useEffect(() => {
@@ -32,6 +41,10 @@ export default function HackerNewsList() {
   return (
     <div>
       <HackerNav />
+      <br />
+      <button onClick={loadData}>load data</button>
+      <br />
+      <br />
       {!newsList && <FaSpinner />}
       {newsList &&
         newsList?.hits?.map((news, index) => (
@@ -40,6 +53,7 @@ export default function HackerNewsList() {
             <br />
           </>
         ))}
+      <br />
     </div>
   );
 }
