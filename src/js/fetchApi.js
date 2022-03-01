@@ -30,12 +30,12 @@ class HackerFetchApi {
   }
 
   async searchByDate(searchParams) {
-    searchParams.searchVariant = searchVariant.BY_DATE;
+    searchParams.searchVariant = SearchVariant.BY_DATE;
     return this.search(searchParams);
   }
 
   async searchByDefault(searchParams) {
-    searchParams.searchVariant = searchVariant.DEFAULT;
+    searchParams.searchVariant = SearchVariant.DEFAULT;
     return this.search(searchParams);
   }
 
@@ -86,8 +86,12 @@ class HackerFetchApi {
 
     // todo numericFilters
     if (searchParams.numericFilters?.length) {
+      console.log(
+        'numerical value name: ',
+        searchParams.numericFilters[0].value.name
+      );
       const nfs = searchParams.numericFilters.map(
-        (nf) => `${nf.field}${nf.numericalCondition}${nf.value}`
+        (nf) => `${nf.field}${nf.numericalCondition}${nf.value.f()}`
       );
       console.log('nfs: ' + nfs);
       queryUrl += `&numericFilters=${nfs}`;
@@ -107,26 +111,52 @@ class HackerFetchApi {
   }
 }
 
-const searchVariant = {
+const SearchVariant = {
   BY_DATE: 'search_by_date',
   DEFAULT: 'search',
 };
 
-const timesInSeconds = {
-  WEEK: Math.floor((Date.now() - 1000 * 60 * 60 * 24 * 7) / 1000),
-  MONTH: Math.floor((Date.now() - 1000 * 60 * 60 * 24 * 7 * 31) / 1000),
+const TimesInSeconds = {
+  DAY: {
+    name: 'DAY',
+    f: () => Math.floor((Date.now() - 1000 * 60 * 60 * 24) / 1000),
+  },
+  WEEK: {
+    name: 'WEEK',
+    f: () => Math.floor((Date.now() - 1000 * 60 * 60 * 24 * 7) / 1000),
+  },
+  MONTH: {
+    name: 'MONTH',
+    f: () => Math.floor((Date.now() - 1000 * 60 * 60 * 24 * 7 * 4) / 1000),
+  },
+  YEAR: {
+    name: 'YEAR',
+    f: () => Math.floor((Date.now() - 1000 * 60 * 60 * 24 * 7 * 52) / 1000),
+  },
+  ALL: { name: 'ALL', f: () => 0 },
 };
 class SearchParams {
-  constructor() {
-    this.searchVariant = searchVariant.DEFAULT;
-    this.query = '';
-    this.tags = [Tags.STORY];
-    this.numericFilters = [
+  constructor(
+    searchVariant = SearchVariant.DEFAULT,
+    query = '',
+    tags = [Tags.STORY],
+    numericFilters = [
       NumericFilter.create(NumericFilters.CREATED_AT_I).greaterEqualThan(
-        timesInSeconds.WEEK
+        TimesInSeconds.DAY
       ),
-    ];
-    this.page = 0;
+    ],
+    page = 0
+  ) {
+    this.searchVariant = searchVariant;
+    this.query = query;
+    this.tags = tags;
+    this.numericFilters = numericFilters;
+    // this.numericFilters = []; // ! temp
+    this.page = page;
+  }
+
+  static create(searchVariant, query, tags, numericFilters, page) {
+    return new SearchParams(searchVariant, query, tags, numericFilters, page);
   }
 
   static default() {
@@ -151,12 +181,12 @@ class SearchParams {
     return sp;
   }
 
-  static author(author) {
+  static author(author, searchParams) {
     const sp = new SearchParams(); // clone wegen useState
     // sp.query = query;
     sp.query = '';
     sp.tags = [Tags.STORY, `${Tags.AUTHOR}${author}`];
-    sp.numericFilters = null;
+    sp.numericFilters = searchParams.numericFilters;
     sp.page = 0;
 
     return sp;
@@ -173,6 +203,7 @@ const Tags = {
   FRONT_PAGE: 'front_page',
   AUTHOR: 'author_',
   STORYID: 'story_',
+  NONE: '',
 };
 
 const NumericFilters = {
@@ -225,4 +256,11 @@ class NumericFilter {
 }
 
 export default HackerFetchApi;
-export { Tags, NumericFilters, NumericFilter, SearchParams };
+export {
+  SearchVariant,
+  Tags,
+  NumericFilters,
+  NumericFilter,
+  SearchParams,
+  TimesInSeconds,
+};

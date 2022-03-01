@@ -42,8 +42,24 @@ export default function HackerNews({ news, gotoStory, gotoAuthor }) {
    */
   function ago() {
     const diffMs = new Date() - new Date(news.created_at_i * 1000);
+
     const diffMins = Math.round(diffMs / 60000);
-    return diffMins;
+    const diffHours = Math.round(diffMs / 60000 / 60);
+    const diffDays = Math.round(diffMs / 60000 / 60 / 24);
+    const diffMonth = Math.round(diffMs / 60000 / 60 / 24 / 30);
+    const diffYears = Math.round(diffMs / 60000 / 60 / 24 / 30 / 12);
+
+    if (diffYears >= 1) {
+      return `${diffYears} year${diffYears > 1 ? 's' : ''} ago`;
+    } else if (diffMonth >= 1) {
+      return `${diffMonth} month ago`;
+    } else if (diffDays >= 1) {
+      return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+    } else if (diffHours >= 1) {
+      return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+    } else {
+      return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`;
+    }
   }
 
   return (
@@ -82,7 +98,7 @@ export default function HackerNews({ news, gotoStory, gotoAuthor }) {
           {news.author}
         </div>
         <div>|</div>
-        <div>{ago()} minutes ago</div>
+        <div>{ago()}</div>
         <div>|</div>
         {news.num_comments > 0 && (
           <div className="news-div-infos-comments" onClick={showComments}>
@@ -93,7 +109,7 @@ export default function HackerNews({ news, gotoStory, gotoAuthor }) {
       </div>
       {showStory && (
         <div
-          className={`news-div-story div-fade-in ${fadeIn ? 'fade-in' : ''}`}
+          className={`news-div-story div-fade-in ${fadeIn && 'fade-in'}`}
           dangerouslySetInnerHTML={{ __html: news.story_text }}
         ></div>
       )}

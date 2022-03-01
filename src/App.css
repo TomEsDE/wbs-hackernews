@@ -45,10 +45,24 @@
   margin-right: 0.5rem;
 }
 
-.hacker-nav-filter {
-  padding: 0.5rem 1rem;
+.hacker-nav-filter-div {
+  display: flex;
+  padding: 1.5rem 1rem 0.5rem 1rem;
   color: aliceblue;
-  text-align: right;
+  /* text-align: right; */
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.hacker-nav-filter {
+  display: flex;
+  align-items: center;
+}
+
+.hacker-nav-filter-select {
+  margin: 0 1rem;
+  color: black;
+  min-width: 10rem;
 }
 
 .news-div {

@@ -1,13 +1,15 @@
 
-☐ search filter
-  ☐ story and comment mixed
-  ☐ by date, by popularity (-> should be default search)
-  ☐ last week, month etc (-> createt_at_i)
+✔ search filter @done(22-03-01 23:36)
+  ✔ story and comment mixed @done(22-03-01 23:36)
+  ✔ by date, by popularity (-> should be default search) @done(22-03-01 23:36)
+  ✔ last week, month etc (-> createt_at_i) @done(22-03-01 23:36)
 ☐ router 
   ☐ story view (getitem request)
 ☐ material ui
 
-☐ ago() -> minutes, hours, days, weeks, months, years...
+☐ comments -> conditional rendering
+
+✔ ago() -> minutes, hours, days, weeks, months, years... @done(22-03-01 18:17)
 
 ☐ no match
 ☐ error api

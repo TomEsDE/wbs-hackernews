@@ -32,6 +32,7 @@ export default function HackerNewsList({ _api }) {
   // load data initially
   useEffect(() => {
     // ! Vorsicht infinite
+    // console.log('--------- searchParams', searchParams);
     loadData();
   }, [searchParams]);
 
@@ -44,9 +45,9 @@ export default function HackerNewsList({ _api }) {
     console.log('query: ', query);
 
     // todo temporär bis filter implementiert
-    const sp = SearchParams.default();
+    // const sp = SearchParams.default();
 
-    setSearchParams(SearchParams.query(query, sp)); // -> useEffect
+    setSearchParams(SearchParams.query(query, { ...searchParams })); // -> useEffect
   }
 
   async function setPage(page) {
@@ -57,6 +58,11 @@ export default function HackerNewsList({ _api }) {
     }
 
     setSearchParams(SearchParams.page(page, { ...searchParams })); // -> useEffect
+  }
+
+  async function setSearchParamsNav(searchParams) {
+    console.log('--------- setSearchParamsNav', searchParams);
+    setSearchParams(searchParams); // -> useEffect
   }
 
   async function gotoStory(id) {
@@ -70,12 +76,17 @@ export default function HackerNewsList({ _api }) {
   async function gotoAuthor(author) {
     console.log('gotoAuthor >>> author: ', author);
 
-    setSearchParams(SearchParams.author(author)); // -> useEffect
+    setSearchParams(SearchParams.author(author, searchParams)); // -> useEffect
   }
 
   return (
     <div>
-      <HackerNav setQuery={setQueryData} newsList={newsList} />
+      <HackerNav
+        setQuery={setQueryData}
+        newsList={newsList}
+        searchParams={searchParams}
+        setSearchParamsNav={setSearchParamsNav}
+      />
 
       <Pagination
         key="1"
