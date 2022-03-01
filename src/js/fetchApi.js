@@ -30,15 +30,19 @@ class HackerFetchApi {
   }
 
   async searchByDate(searchParams) {
+    searchParams.searchVariant = searchVariant.BY_DATE;
     return this.search(searchParams);
   }
 
   async searchByDefault(searchParams) {
+    searchParams.searchVariant = searchVariant.DEFAULT;
     return this.search(searchParams);
   }
 
   async search(searchParams) {
-    const resp = await fetch(this.buildQuery(searchParams));
+    const resp = await fetch(this.buildQuery(searchParams), (error) =>
+      console.log('fetch-error: ', error)
+    );
 
     // console.log('resp: ', resp);
 
@@ -47,6 +51,7 @@ class HackerFetchApi {
       return data;
     } else {
       // todo throw error
+      throw new Error('Request failed!');
     }
   }
 
@@ -129,7 +134,7 @@ class SearchParams {
   }
 
   static query(query, searchParams = new SearchParams()) {
-    const sp = { ...searchParams }; // clone wegen useState
+    const sp = searchParams;
 
     sp.tags = [Tags.STORY]; // todo sollte von ui kommen
     sp.query = query;
@@ -139,7 +144,7 @@ class SearchParams {
   }
 
   static page(page, searchParams) {
-    const sp = { ...searchParams }; // clone wegen useState
+    const sp = searchParams;
     // sp.query = query;
     sp.page = page;
 

@@ -14,16 +14,6 @@ export default function HackerNewsList({ _api }) {
   // const _api = new HackerFetchApi();
   const [newsList, setNewsList] = useState(null);
   const [searchParams, setSearchParams] = useState(SearchParams.default());
-  // const [page, setPage] = useState(1);
-
-  // const _queryParams = useRef({
-  //   query: '',
-  //   tags: [Tags.STORY],
-  //   numericFilters: [
-  //     NumericFilter.create(NumericFilters.POINTS).greaterEqualThan(100),
-  //   ],
-  //   page: 0,
-  // });
 
   async function loadData() {
     // trigger render for loading symbol
@@ -35,11 +25,8 @@ export default function HackerNewsList({ _api }) {
     // ! real data
     const data = await _api.search(searchParams);
 
-    setNewsList(data);
-
     // ! Vorsicht infinite
-    // _queryParams.current.page = +data.page;
-    // _page.current = +data.page;
+    setNewsList(data);
   }
 
   // load data initially
@@ -53,20 +40,13 @@ export default function HackerNewsList({ _api }) {
     console.log('newsList: ', newsList);
   }, [newsList]);
 
-  // useEffect(() => {
-  //   // fetch data...
-  //   console.log('useEffect >>> page: ', page);
-  //   loadData();
-
-  //   return () => {
-  //     // todo
-  //   };
-  // }, [page]);
-
   async function setQueryData(query) {
     console.log('query: ', query);
 
-    setSearchParams(SearchParams.query(query, searchParams)); // -> useEffect
+    // todo temporär bis filter implementiert
+    const sp = SearchParams.default();
+
+    setSearchParams(SearchParams.query(query, sp)); // -> useEffect
   }
 
   async function setPage(page) {
@@ -75,8 +55,8 @@ export default function HackerNewsList({ _api }) {
     } else if (page > newsList.nbPages) {
       page = newsList.nbPages - 1;
     }
-    // _page.current = page;
-    setSearchParams(SearchParams.page(page, searchParams)); // -> useEffect
+
+    setSearchParams(SearchParams.page(page, { ...searchParams })); // -> useEffect
   }
 
   async function gotoStory(id) {

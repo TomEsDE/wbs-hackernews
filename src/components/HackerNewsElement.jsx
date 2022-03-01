@@ -28,7 +28,7 @@ export default function HackerNews({ news, gotoStory, gotoAuthor }) {
   }
 
   function showStoryText(event) {
-    console.log('showStoryText', news.story_text);
+    // console.log('showStoryText', news.story_text);
     setFadeIn(false);
     setShowStory(!showStory);
     setTimeout(() => {

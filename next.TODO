@@ -7,13 +7,11 @@
   ☐ story view (getitem request)
 ☐ material ui
 
+☐ ago() -> minutes, hours, days, weeks, months, years...
+
 ☐ no match
 ☐ error api
 
 ☐ spinner spinning
 
-☐ SearchParam Class in api
-
-
-
-✔ test @done(22-02-28 23:03)
+✔ SearchParam Class in api @done(22-03-01 10:57)

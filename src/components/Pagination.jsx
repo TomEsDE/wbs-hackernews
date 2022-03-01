@@ -22,28 +22,32 @@ export default function Pagination({ page, nbPages, hitsPerPage, setPage }) {
   });
 
   return (
-    <div className="pagination-div">
-      <button onClick={() => setPage(+page - 10)} disabled={+page === 0}>
-        <FaFastBackward />
-      </button>
-      <button onClick={() => setPage(+page - 1)} disabled={+page === 0}>
-        <FaBackward />
-      </button>
-      <div>
-        Seite {+page + 1} {nbPages && `/ ${nbPages}`}
-      </div>
-      <button
-        onClick={() => setPage(+page + 1)}
-        disabled={+page === nbPages - 1}
-      >
-        <FaForward />
-      </button>
-      <button
-        onClick={() => setPage(+page + 10)}
-        disabled={+page === nbPages - 1}
-      >
-        <FaFastForward />
-      </button>
-    </div>
+    <>
+      {nbPages > 0 && (
+        <div className="pagination-div">
+          <button onClick={() => setPage(+page - 10)} disabled={+page === 0}>
+            <FaFastBackward />
+          </button>
+          <button onClick={() => setPage(+page - 1)} disabled={+page === 0}>
+            <FaBackward />
+          </button>
+          <div>
+            Seite {+page + 1} {nbPages && `/ ${nbPages}`}
+          </div>
+          <button
+            onClick={() => setPage(+page + 1)}
+            disabled={+page === nbPages - 1}
+          >
+            <FaForward />
+          </button>
+          <button
+            onClick={() => setPage(+page + 10)}
+            disabled={+page === nbPages - 1}
+          >
+            <FaFastForward />
+          </button>
+        </div>
+      )}
+    </>
   );
 }
