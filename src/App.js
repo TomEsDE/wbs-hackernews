@@ -6,7 +6,7 @@ import HackerFetchApi from './js/fetchApi';
 function App() {
   return (
     <div className="App">
-      <HackerNewsList api={new HackerFetchApi()} />
+      <HackerNewsList _api={new HackerFetchApi()} />
       <Footer />
     </div>
   );

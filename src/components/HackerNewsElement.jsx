@@ -5,22 +5,35 @@ import {
   FaRegArrowAltCircleDown,
 } from 'react-icons/fa';
 
-export default function HackerNews({ news }) {
+export default function HackerNews({ news, gotoStory, gotoAuthor }) {
   const [showStory, setShowStory] = useState(false);
+  const [fadeIn, setFadeIn] = useState(false);
 
   function handleShowNews(event) {
     event.preventDefault();
-    console.log('handleShowNews >> id: ', news.objectID);
-    console.log('url: ', news.url);
+    // console.log('handleShowNews >> id: ', news.objectID);
+    // console.log('url: ', news.url);
+
+    gotoStory(news.objectID);
   }
 
   function showComments(event) {
     console.log('showComments');
+    gotoStory(news.objectID);
+  }
+
+  function showAuthor(event) {
+    gotoAuthor(news.author);
+    // gotoStory(news.author);
   }
 
   function showStoryText(event) {
     console.log('showStoryText', news.story_text);
+    setFadeIn(false);
     setShowStory(!showStory);
+    setTimeout(() => {
+      setFadeIn(true);
+    }, 50);
   }
 
   /**
@@ -28,11 +41,8 @@ export default function HackerNews({ news }) {
    * @returns
    */
   function ago() {
-    // console.log('news.created_at_i: ', new Date(news.created_at).getTime());
-    const diffMs = Date.now() - new Date(news.created_at).getTime();
-    // console.log('diffMs: ', diffMs);
-    const diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000);
-    // console.log('diffMins: ', diffMins);
+    const diffMs = new Date() - new Date(news.created_at_i * 1000);
+    const diffMins = Math.round(diffMs / 60000);
     return diffMins;
   }
 
@@ -68,7 +78,9 @@ export default function HackerNews({ news }) {
           {news.points} point{news.points > 1 ? 's' : ''}
         </div>
         <div>|</div>
-        <div>{news.author}</div>
+        <div className="news-div-infos-comments" onClick={showAuthor}>
+          {news.author}
+        </div>
         <div>|</div>
         <div>{ago()} minutes ago</div>
         <div>|</div>
@@ -81,7 +93,7 @@ export default function HackerNews({ news }) {
       </div>
       {showStory && (
         <div
-          className="news-div-story"
+          className={`news-div-story div-fade-in ${fadeIn ? 'fade-in' : ''}`}
           dangerouslySetInnerHTML={{ __html: news.story_text }}
         ></div>
       )}

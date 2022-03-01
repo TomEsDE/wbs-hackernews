@@ -104,3 +104,12 @@
 .arrow-turn {
   transform: rotate(135deg);
 }
+
+.div-fade-in {
+  opacity: 0;
+  transition: opacity 1s;
+}
+
+.fade-in {
+  opacity: 1;
+}

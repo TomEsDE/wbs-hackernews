@@ -1,19 +1,31 @@
 import React, { useEffect, useRef, useState } from 'react';
-import HackerFetchApi, { Tags } from '../js/fetchApi';
+import HackerFetchApi, {
+  NumericFilter,
+  NumericFilters,
+  Tags,
+  SearchParams,
+} from '../js/fetchApi';
 import HackerNav from './HackerNav';
 import HackerNews from './HackerNewsElement';
 import { FaSpinner } from 'react-icons/fa';
 import Pagination from './Pagination';
 
-export default function HackerNewsList() {
-  const _api = new HackerFetchApi();
+export default function HackerNewsList({ _api }) {
+  // const _api = new HackerFetchApi();
   const [newsList, setNewsList] = useState(null);
+  const [searchParams, setSearchParams] = useState(SearchParams.default());
   // const [page, setPage] = useState(1);
 
-  const query = useRef('');
-  const page = useRef('');
+  // const _queryParams = useRef({
+  //   query: '',
+  //   tags: [Tags.STORY],
+  //   numericFilters: [
+  //     NumericFilter.create(NumericFilters.POINTS).greaterEqualThan(100),
+  //   ],
+  //   page: 0,
+  // });
 
-  function loadData() {
+  async function loadData() {
     // trigger render for loading symbol
     setNewsList(null);
 
@@ -21,20 +33,23 @@ export default function HackerNewsList() {
     // _api?.getMockData(1000).then((data) => setNewsList(data));
 
     // ! real data
-    _api
-      ?.searchByDate(query.current, [Tags.STORY], null, page.current)
-      .then((data) => {
-        setNewsList(data);
-        page.current = +data.page;
-      });
+    const data = await _api.search(searchParams);
+
+    setNewsList(data);
+
+    // ! Vorsicht infinite
+    // _queryParams.current.page = +data.page;
+    // _page.current = +data.page;
   }
 
   // load data initially
   useEffect(() => {
+    // ! Vorsicht infinite
     loadData();
-  }, []);
+  }, [searchParams]);
 
   useEffect(() => {
+    // ! Vorsicht infinite
     console.log('newsList: ', newsList);
   }, [newsList]);
 
@@ -48,21 +63,34 @@ export default function HackerNewsList() {
   //   };
   // }, [page]);
 
-  function setQueryData(queryParam) {
-    console.log('query: ', queryParam);
-    query.current = queryParam;
-    page.current = 0;
-    loadData(queryParam);
+  async function setQueryData(query) {
+    console.log('query: ', query);
+
+    setSearchParams(SearchParams.query(query, searchParams)); // -> useEffect
   }
 
-  function setPage(pageParam) {
-    if (pageParam < 0) {
-      pageParam = 0;
-    } else if (pageParam > newsList.nbPages) {
-      pageParam = newsList.nbPages - 1;
+  async function setPage(page) {
+    if (page < 0) {
+      page = 0;
+    } else if (page > newsList.nbPages) {
+      page = newsList.nbPages - 1;
     }
-    page.current = pageParam;
-    loadData();
+    // _page.current = page;
+    setSearchParams(SearchParams.page(page, searchParams)); // -> useEffect
+  }
+
+  async function gotoStory(id) {
+    console.log('gotoStory >>> id: ', id);
+    const data = await _api.getItem(id);
+    console.log('data: ', data);
+    // todo router
+    // ...
+  }
+
+  async function gotoAuthor(author) {
+    console.log('gotoAuthor >>> author: ', author);
+
+    setSearchParams(SearchParams.author(author)); // -> useEffect
   }
 
   return (
@@ -71,7 +99,7 @@ export default function HackerNewsList() {
 
       <Pagination
         key="1"
-        page={page.current}
+        page={searchParams.page}
         nbPages={newsList?.nbPages}
         hitsPerPage={newsList?.hitsPerPage}
         setPage={setPage}
@@ -81,12 +109,17 @@ export default function HackerNewsList() {
       {newsList &&
         newsList?.hits?.map((news, index) => (
           <>
-            <HackerNews key={news.objectID} news={news} />
+            <HackerNews
+              key={news.objectID}
+              news={news}
+              gotoStory={gotoStory}
+              gotoAuthor={gotoAuthor}
+            />
           </>
         ))}
       <Pagination
         key="2"
-        page={page.current}
+        page={searchParams.page}
         nbPages={newsList?.nbPages}
         hitsPerPage={newsList?.hitsPerPage}
         setPage={setPage}
