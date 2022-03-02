@@ -1,3 +1,71 @@
 .hackerstory-div {
   padding: 1rem;
 }
+
+.story-back {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  font-size: smaller;
+  color: blueviolet;
+}
+
+.story-title {
+  padding: 0.6rem;
+  text-align: center;
+  font-size: x-large;
+  color: wheat;
+  background: linear-gradient(to left top, coral, purple);
+}
+
+.story-subtitle {
+  display: flex;
+  justify-content: space-between;
+}
+
+.story-link {
+  font-size: smaller;
+}
+
+.story-date {
+  font-style: italic;
+  font-size: smaller;
+  color: gray;
+}
+
+.story-text {
+  font-size: smaller;
+}
+
+.comments-div {
+  padding-top: 1rem;
+  font-size: smaller;
+}
+
+.comments {
+  padding-left: 1.5rem;
+}
+
+.comment-div {
+  border-bottom: 1px dashed lightgray;
+}
+
+.comment {
+  display: flex;
+  gap: 5px;
+}
+
+.comment p {
+  margin: 0.1rem;
+  margin-bottom: 0.4rem;
+}
+
+.comment-date {
+  font-style: italic;
+  font-size: smaller;
+  color: gray;
+  /* text-align: right; */
+  /* padding-right: 0.2rem; */
+  padding-left: 1.8rem;
+  padding-top: 0.2rem;
+}
