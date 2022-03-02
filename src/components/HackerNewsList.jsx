@@ -1,15 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
-import HackerFetchApi, {
-  NumericFilter,
-  NumericFilters,
-  Tags,
-  SearchParams,
-} from '../js/fetchApi';
+import { SearchParams } from '../js/fetchApi';
 import HackerNav from './HackerNav';
 import HackerNews from './HackerNewsElement';
 import { FaSpinner } from 'react-icons/fa';
 import Pagination from './Pagination';
 
+/**
+ *
+ * @param {*} param0
+ * @returns
+ */
 export default function HackerNewsList({ _api }) {
   // const _api = new HackerFetchApi();
   const [newsList, setNewsList] = useState(null);
@@ -75,7 +75,6 @@ export default function HackerNewsList({ _api }) {
 
   async function gotoAuthor(author) {
     console.log('gotoAuthor >>> author: ', author);
-
     setSearchParams(SearchParams.author(author, searchParams)); // -> useEffect
   }
 
@@ -96,8 +95,13 @@ export default function HackerNewsList({ _api }) {
         setPage={setPage}
       />
 
-      {!newsList && <FaSpinner size={70} />}
-      {newsList &&
+      {!newsList && (
+        <div className="loading-symbol">
+          <FaSpinner size={70} />
+        </div>
+      )}
+      {true &&
+        newsList &&
         newsList?.hits?.map((news, index) => (
           <>
             <HackerNews

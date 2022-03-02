@@ -41,35 +41,41 @@ export default function HackerNav({
   // const searchParams = SearchParams.default(); // ! debug
   const [queryInput, setQueryInput] = useState('');
 
-  const [selectTags, setSelectTags] = useState(
-    searchParams.tags
-      ? optionsTags.find((o) => o.value === searchParams.tags[0])
-      : optionsTags[0]
-  );
-  const [selectVariant, setSelectVariant] = useState(
-    //optionsVariant[0]);
-    searchParams.searchVariant
-      ? optionsVariant.filter(
-          (variant) => variant.value === searchParams.searchVariant
-        )
-      : optionsVariant[0]
-  );
-
-  const [selectDate, setSelectDate] = useState(
-    //optionsDate[0]);
-    searchParams.numericFilters
-      ? optionsDate.filter(
-          (date) =>
-            date.value.name === searchParams.numericFilters[0].value.name
-        )
-      : optionsDate[0]
-  );
+  const [selectTags, setSelectTags] = useState();
+  const [selectVariant, setSelectVariant] = useState();
+  const [selectDate, setSelectDate] = useState();
 
   // const searchParams = SearchParams.default();
 
   useEffect(() => {
-    console.log('searchParams: ', searchParams);
-  }, []);
+    console.log('~~~~~ searchParams: ', searchParams);
+    setSelectTags(
+      searchParams.tags
+        ? optionsTags.find((o) => o.value === searchParams.tags[0])
+        : optionsTags[0]
+    );
+
+    setSelectVariant(
+      //optionsVariant[0]);
+      searchParams.searchVariant
+        ? optionsVariant.filter(
+            (variant) => variant.value === searchParams.searchVariant
+          )
+        : optionsVariant[0]
+    );
+
+    setSelectDate(
+      searchParams.numericFilters
+        ? optionsDate.filter(
+            (date) =>
+              date.value.name ===
+              searchParams.numericFilters.find(
+                (nf) => nf.field === NumericFilters.CREATED_AT_I
+              ).value.name
+          )
+        : optionsDate[0]
+    );
+  }, [searchParams]);
 
   function handleQueryChange({ target }) {
     setQueryInput(target.value);
@@ -91,7 +97,7 @@ export default function HackerNav({
       // new search
       setSearchParamsNav({
         ...searchParams,
-        searchVariant: [selectedOption.value],
+        searchVariant: selectedOption.value,
       });
     }
   }
@@ -101,6 +107,7 @@ export default function HackerNav({
       console.log('handleFilterDateChange: ', selectedOption);
       setSelectDate(selectedOption); // -> useEffect
       // new search
+      // todo numericFilters.map falls mehrere (-> nur CREATED_AT_I ersetzen)
       setSearchParamsNav({
         ...searchParams,
         numericFilters: [
@@ -114,6 +121,7 @@ export default function HackerNav({
 
   function handleSubmitQuery(event) {
     event.preventDefault();
+    // -> parent
     setQuery(queryInput);
   }
 
@@ -150,22 +158,23 @@ export default function HackerNav({
             className="hacker-nav-filter-select"
             onChange={handleFilterTagChange}
             options={optionsTags}
-            defaultValue={selectTags}
+            value={selectTags}
           />
           <div> by </div>
           <Select
             className="hacker-nav-filter-select"
             onChange={handleFilterVariantChange}
             options={optionsVariant}
-            defaultValue={selectVariant}
+            value={selectVariant}
           />
           <div> for </div>
           <Select
             className="hacker-nav-filter-select"
             onChange={handleFilterDateChange}
             options={optionsDate}
-            defaultValue={selectDate}
+            value={selectDate}
           />
+          {/* <button onClick={testSelectChange}>Test Select Change</button> */}
         </div>
         {newsList && <div>{newsList.nbHits} results</div>}
       </div>

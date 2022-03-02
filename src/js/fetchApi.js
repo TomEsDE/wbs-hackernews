@@ -40,6 +40,7 @@ class HackerFetchApi {
   }
 
   async search(searchParams) {
+    // todo try catch und error handling
     const resp = await fetch(this.buildQuery(searchParams), (error) =>
       console.log('fetch-error: ', error)
     );
@@ -78,27 +79,28 @@ class HackerFetchApi {
       queryUrl += `query=${searchParams.query}`;
     }
 
-    // todo tags -> author and storyid different
+    // tags -> author and storyid different
     // brackets mean 'OR'
     if (searchParams.tags.length) {
       queryUrl += `&tags=${searchParams.tags}`;
     }
 
-    // todo numericFilters
+    // numericFilters
     if (searchParams.numericFilters?.length) {
-      console.log(
-        'numerical value name: ',
-        searchParams.numericFilters[0].value.name
-      );
-      const nfs = searchParams.numericFilters.map(
-        (nf) => `${nf.field}${nf.numericalCondition}${nf.value.f()}`
-      );
-      console.log('nfs: ' + nfs);
+      const nfs = searchParams.numericFilters.map((nf) => {
+        // console.log('type of nf.value: ', typeof nf.value);
+        let value = nf.value;
+        if (typeof value === 'object') {
+          value = value.f();
+        }
+        console.log(`nf.value von Typ ${nf.value.name}: `, value);
+        return `${nf.field}${nf.numericalCondition}${nf.value.f()}`;
+      });
+      // console.log('nfs: ' + nfs);
       queryUrl += `&numericFilters=${nfs}`;
     }
 
-    // todo page
-    // ...
+    // page
     if (searchParams.page) {
       queryUrl += `&page=${searchParams.page}`;
     }
@@ -186,7 +188,12 @@ class SearchParams {
     // sp.query = query;
     sp.query = '';
     sp.tags = [Tags.STORY, `${Tags.AUTHOR}${author}`];
-    sp.numericFilters = searchParams.numericFilters;
+    // sp.numericFilters = searchParams.numericFilters;
+    sp.numericFilters = [
+      NumericFilter.create(NumericFilters.CREATED_AT_I).greaterEqualThan(
+        TimesInSeconds.YEAR
+      ),
+    ];
     sp.page = 0;
 
     return sp;

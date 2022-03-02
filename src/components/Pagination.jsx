@@ -18,7 +18,7 @@ export default function Pagination({ page, nbPages, hitsPerPage, setPage }) {
   }
 
   useEffect(() => {
-    console.log('Pagination rendered');
+    // console.log('Pagination rendered');
   });
 
   return (

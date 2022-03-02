@@ -65,6 +65,14 @@
   min-width: 10rem;
 }
 
+.loading-symbol {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: calc(100vh - 300px);
+}
+
 .news-div {
   padding: 0.3rem 0;
   border-bottom: 1px dotted gray;
