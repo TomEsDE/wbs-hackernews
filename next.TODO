@@ -8,10 +8,11 @@
 ☐ material ui
 
 ✔ comments -> conditional rendering @done(22-03-02 11:30)
+  ☐ link to story
 
-☐ mark/highlight searched text 
+✔ mark/highlight searched text @done(22-03-02 17:37)
   ✔ in stories and @done(22-03-02 11:30)
-  ☐ comments (big one)
+  ✔ comments (big one... ez thx to Olin) @done(22-03-02 15:15)
 
 ✔ ago() -> minutes, hours, days, weeks, months, years... @done(22-03-01 18:17)
 

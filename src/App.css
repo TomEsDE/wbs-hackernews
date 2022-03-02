@@ -4,3 +4,31 @@
   margin: 0 auto;
   max-width: 70rem;
 }
+
+.arrow-turn {
+  transform: rotate(135deg);
+  margin-right: 0.5rem;
+}
+
+.div-fade-in {
+  opacity: 0;
+  transition: opacity 1s;
+}
+
+.fade-in {
+  opacity: 1;
+}
+
+.error {
+  font-size: xx-large;
+  color: red;
+  padding: 2rem;
+  height: calc(100vh - 300px);
+}
+
+.noresult {
+  font-size: xx-large;
+  color: orange;
+  padding: 2rem;
+  height: calc(100vh - 300px);
+}

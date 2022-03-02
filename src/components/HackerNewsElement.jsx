@@ -6,6 +6,7 @@ import {
   FaLongArrowAltDown,
   FaRegArrowAltCircleDown,
 } from 'react-icons/fa';
+import { Duration } from 'luxon';
 
 export default function HackerNews({ news, gotoStory, gotoAuthor, query }) {
   const navigate = useNavigate();
@@ -41,29 +42,51 @@ export default function HackerNews({ news, gotoStory, gotoAuthor, query }) {
   }
 
   /**
-   * todo conversion wrong
-   * @returns
+   * @returns wie lang liegt die News zurueck
    */
   function ago() {
     const diffMs = new Date() - new Date(news.created_at_i * 1000);
 
-    const diffMins = Math.round(diffMs / 60000);
-    const diffHours = Math.round(diffMs / 60000 / 60);
-    const diffDays = Math.round(diffMs / 60000 / 60 / 24);
-    const diffMonth = Math.round(diffMs / 60000 / 60 / 24 / 30);
-    const diffYears = Math.round(diffMs / 60000 / 60 / 24 / 30 / 12);
+    // luxon lib -> thx to Martin!
+    const dur = Duration.fromMillis(diffMs);
 
-    if (diffYears >= 1) {
-      return `${diffYears} year${diffYears > 1 ? 's' : ''} ago`;
-    } else if (diffMonth >= 1) {
-      return `${diffMonth} month ago`;
-    } else if (diffDays >= 1) {
-      return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
-    } else if (diffHours >= 1) {
-      return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
-    } else {
-      return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`;
+    const periods = ['year', 'month', 'day', 'hour', 'minute'];
+
+    let returnText = 'ago';
+
+    for (let idx in periods) {
+      // console.log('period: ', periods[idx]);
+      const periodDur = Math.round(dur.as(periods[idx] + 's'));
+      // console.log('periodDur: ', periodDur);
+      if (periodDur >= 1) {
+        returnText = `${periodDur} ${periods[idx]}${
+          periodDur > 1 ? 's' : ''
+        } ago`;
+        break;
+      }
     }
+
+    return returnText;
+  }
+
+  /**
+   * danke Olin :P
+   *
+   * @param {} str
+   * @returns
+   */
+  function addHighlightsToString(str) {
+    if (query) {
+      const r = new RegExp(`(${query})`, 'ig');
+      str = str.replaceAll(r, `<span class="highlightQueryWords">$&</span>`);
+    }
+
+    return (
+      <div
+        className="news-div-comment"
+        dangerouslySetInnerHTML={{ __html: str }}
+      ></div>
+    );
   }
 
   return (
@@ -90,33 +113,27 @@ export default function HackerNews({ news, gotoStory, gotoAuthor, query }) {
           </div>
         )}
         {news.title && (
-          <Highlighter
-            highlightClassName="news-div-title highlightQueryWords"
-            searchWords={[query]}
-            autoEscape={true}
-            // textToHighlight={{ __html: news.comment_text }}
-            textToHighlight={news.title}
-          />
-          // <div className="news-div-title" onClick={handleShowNews}>
-          //   {news?.title}
-          // </div>
+          <div className="news-div-title">
+            <Highlighter
+              onClick={() => {
+                navigate(`/story/${news.objectID}`);
+              }}
+              highlightClassName="highlightQueryWords"
+              searchWords={[query]}
+              autoEscape={true}
+              textToHighlight={news.title}
+            />
+          </div>
         )}
 
-        {news.comment_text && (
-          // <>
-          //   <Highlighter
-          //     highlightClassName="highlightQueryWords"
-          //     searchWords={[query]}
-          //     autoEscape={true}
-          //     // textToHighlight={{ __html: news.comment_text }}
-          //     textToHighlight={news.comment_text}
-          //   />
-          // </>
+        {news.comment_text && addHighlightsToString(news.comment_text)}
+
+        {/* {news.comment_text && (
           <div
             className="news-div-comment"
             dangerouslySetInnerHTML={{ __html: news.comment_text }}
           ></div>
-        )}
+        )} */}
       </div>
       <div className="news-div-infos">
         <div>

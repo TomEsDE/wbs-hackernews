@@ -70,7 +70,7 @@
 }
 
 .news-div {
-  padding: 0.3rem 0;
+  padding: 0.5rem 0;
   border-bottom: 1px dotted gray;
 }
 
@@ -91,6 +91,12 @@
 }
 
 .news-div-title {
+  cursor: pointer;
+  transition: all ease 0.2s;
+}
+
+.news-div-title:hover {
+  background: lavender;
 }
 
 .highlightQueryWords {
@@ -119,6 +125,7 @@
 
 .news-div-story {
   padding-top: 1rem;
+  font-size: smaller;
 }
 
 .pagination-div {
@@ -129,31 +136,4 @@
   font-style: italic;
   font-size: 10pt;
   color: gray;
-}
-
-.arrow-turn {
-  transform: rotate(135deg);
-}
-
-.div-fade-in {
-  opacity: 0;
-  transition: opacity 1s;
-}
-
-.fade-in {
-  opacity: 1;
-}
-
-.error {
-  font-size: xx-large;
-  color: red;
-  padding: 2rem;
-  height: calc(100vh - 300px);
-}
-
-.noresult {
-  font-size: xx-large;
-  color: orange;
-  padding: 2rem;
-  height: calc(100vh - 300px);
 }
