@@ -7,12 +7,16 @@
   ☐ story view (getitem request)
 ☐ material ui
 
-☐ comments -> conditional rendering
+✔ comments -> conditional rendering @done(22-03-02 11:30)
+
+☐ mark/highlight searched text 
+  ✔ in stories and @done(22-03-02 11:30)
+  ☐ comments (big one)
 
 ✔ ago() -> minutes, hours, days, weeks, months, years... @done(22-03-01 18:17)
 
-☐ no match
-☐ error api
+✔ no match @done(22-03-02 10:24)
+✔ error api @done(22-03-02 10:24)
 
 ☐ spinner spinning
 

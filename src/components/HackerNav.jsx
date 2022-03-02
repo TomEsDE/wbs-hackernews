@@ -10,9 +10,10 @@ import {
 } from '../js/fetchApi';
 
 const optionsTags = [
-  { value: Tags.STORY, label: 'Story' },
-  { value: Tags.COMMENT, label: 'Comments' },
-  { value: Tags.NONE, label: 'All' },
+  { value: [Tags.STORY], label: 'Story' },
+  { value: [Tags.COMMENT], label: 'Comments' },
+  // { value: [Tags.STORY, Tags.COMMENT], label: 'All' },
+  { value: [], label: 'All' },
 ];
 const optionsVariant = [
   { value: SearchVariant.DEFAULT, label: 'Popularity' },
@@ -51,7 +52,7 @@ export default function HackerNav({
     console.log('~~~~~ searchParams: ', searchParams);
     setSelectTags(
       searchParams.tags
-        ? optionsTags.find((o) => o.value === searchParams.tags[0])
+        ? optionsTags.find((o) => o.value[0] === searchParams.tags[0])
         : optionsTags[0]
     );
 
@@ -82,11 +83,14 @@ export default function HackerNav({
   }
 
   function handleFilterTagChange(selectedOption) {
-    if (selectedOption.value !== selectTags.value) {
+    if (selectedOption?.value !== selectTags?.value) {
       console.log('handleFilterTagChange: ', selectedOption);
       setSelectTags(selectedOption); // -> useEffect
       // new search
-      setSearchParamsNav({ ...searchParams, tags: [selectedOption.value] });
+      setSearchParamsNav({
+        ...searchParams,
+        tags: selectedOption.value,
+      });
     }
   }
 
@@ -143,12 +147,12 @@ export default function HackerNav({
             placeholder="Search for News"
             id=""
           />
-          <button
+          {/* <button
             className="headernav-button-search"
             onClick={handleSubmitQuery}
           >
             search
-          </button>
+          </button> */}
         </form>
       </div>
       <div className="hacker-nav-filter-div">

@@ -14,6 +14,7 @@ export default function HackerNewsList({ _api }) {
   // const _api = new HackerFetchApi();
   const [newsList, setNewsList] = useState(null);
   const [searchParams, setSearchParams] = useState(SearchParams.default());
+  const [error, setError] = useState(null);
 
   async function loadData() {
     // trigger render for loading symbol
@@ -23,10 +24,15 @@ export default function HackerNewsList({ _api }) {
     // _api?.getMockData(1000).then((data) => setNewsList(data));
 
     // ! real data
-    const data = await _api.search(searchParams);
-
-    // ! Vorsicht infinite
-    setNewsList(data);
+    try {
+      setError(null);
+      const data = await _api.search(searchParams);
+      // ! Vorsicht infinite
+      setNewsList(data);
+    } catch (error) {
+      console.log('ERROR', error);
+      setError(error);
+    }
   }
 
   // load data initially
@@ -94,8 +100,12 @@ export default function HackerNewsList({ _api }) {
         hitsPerPage={newsList?.hitsPerPage}
         setPage={setPage}
       />
+      {error && <div className="error">{error.message}</div>}
+      {newsList && newsList.hits.length === 0 && (
+        <div className="noresult">Keine Suchergebnis</div>
+      )}
 
-      {!newsList && (
+      {!newsList && !error && (
         <div className="loading-symbol">
           <FaSpinner size={70} />
         </div>
@@ -109,6 +119,7 @@ export default function HackerNewsList({ _api }) {
               news={news}
               gotoStory={gotoStory}
               gotoAuthor={gotoAuthor}
+              query={searchParams.query}
             />
           </>
         ))}

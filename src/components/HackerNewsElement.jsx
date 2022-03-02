@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
+import Highlighter from 'react-highlight-words';
 import {
   FaLocationArrow,
   FaLongArrowAltDown,
   FaRegArrowAltCircleDown,
 } from 'react-icons/fa';
 
-export default function HackerNews({ news, gotoStory, gotoAuthor }) {
+export default function HackerNews({ news, gotoStory, gotoAuthor, query }) {
   const [showStory, setShowStory] = useState(false);
   const [fadeIn, setFadeIn] = useState(false);
 
@@ -85,9 +86,34 @@ export default function HackerNews({ news, gotoStory, gotoAuthor }) {
             <FaLocationArrow className="arrow-turn" size={20} />
           </div>
         )}
-        <div className="news-div-link" onClick={handleShowNews}>
-          {news?.title}
-        </div>
+        {news.title && (
+          <Highlighter
+            highlightClassName="news-div-title highlightQueryWords"
+            searchWords={[query]}
+            autoEscape={true}
+            // textToHighlight={{ __html: news.comment_text }}
+            textToHighlight={news.title}
+          />
+          // <div className="news-div-title" onClick={handleShowNews}>
+          //   {news?.title}
+          // </div>
+        )}
+
+        {news.comment_text && (
+          // <>
+          //   <Highlighter
+          //     highlightClassName="highlightQueryWords"
+          //     searchWords={[query]}
+          //     autoEscape={true}
+          //     // textToHighlight={{ __html: news.comment_text }}
+          //     textToHighlight={news.comment_text}
+          //   />
+          // </>
+          <div
+            className="news-div-comment"
+            dangerouslySetInnerHTML={{ __html: news.comment_text }}
+          ></div>
+        )}
       </div>
       <div className="news-div-infos">
         <div>

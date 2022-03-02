@@ -41,18 +41,23 @@ class HackerFetchApi {
 
   async search(searchParams) {
     // todo try catch und error handling
-    const resp = await fetch(this.buildQuery(searchParams), (error) =>
-      console.log('fetch-error: ', error)
-    );
+    try {
+      const resp = await fetch(this.buildQuery(searchParams), (error) => {
+        console.log('fetch-error: ', error);
+        throw new Error(error);
+      });
 
-    // console.log('resp: ', resp);
+      // console.log('resp: ', resp);
 
-    if (resp.ok) {
-      const data = await resp.json();
-      return data;
-    } else {
-      // todo throw error
-      throw new Error('Request failed!');
+      if (resp.ok) {
+        const data = await resp.json();
+        return data;
+      } else {
+        // todo throw error
+        throw new Error('Request failed!');
+      }
+    } catch (error) {
+      throw new Error(error);
     }
   }
 
@@ -82,7 +87,7 @@ class HackerFetchApi {
     // tags -> author and storyid different
     // brackets mean 'OR'
     if (searchParams.tags.length) {
-      queryUrl += `&tags=${searchParams.tags}`;
+      queryUrl += `&tags=(${searchParams.tags})`;
     }
 
     // numericFilters
@@ -168,7 +173,7 @@ class SearchParams {
   static query(query, searchParams = new SearchParams()) {
     const sp = searchParams;
 
-    sp.tags = [Tags.STORY]; // todo sollte von ui kommen
+    // sp.tags = [Tags.STORY]; // todo sollte von ui kommen
     sp.query = query;
     sp.page = 0;
 

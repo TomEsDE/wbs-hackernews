@@ -1,7 +1,8 @@
 .App {
-  padding: 1rem;
   text-align: left;
-  background: lightgoldenrodyellow;
+  padding: 1rem 2vw;
+  margin: 0 auto;
+  max-width: 70rem;
 }
 
 .header {
@@ -34,9 +35,11 @@
 
 .headernav-input-search {
   padding: 5px;
-  font-size: larger;
+  font-size: x-large;
   margin-right: 0.5rem;
   flex-grow: 1;
+  border-radius: 5px;
+  border-color: lightgray;
 }
 
 .headernav-button-search {
@@ -94,6 +97,18 @@
   margin-right: 0.5rem;
 }
 
+.news-div-title {
+}
+
+.highlightQueryWords {
+  background: lightcyan;
+}
+
+.news-div-comment {
+  font-size: smaller;
+  color: darkslategray;
+}
+
 .news-div-infos {
   display: flex;
   gap: 0.5rem;
@@ -134,4 +149,18 @@
 
 .fade-in {
   opacity: 1;
+}
+
+.error {
+  font-size: xx-large;
+  color: red;
+  padding: 2rem;
+  height: calc(100vh - 300px);
+}
+
+.noresult {
+  font-size: xx-large;
+  color: orange;
+  padding: 2rem;
+  height: calc(100vh - 300px);
 }
