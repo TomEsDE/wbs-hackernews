@@ -50,6 +50,7 @@ export default function HackerNav({
 
   useEffect(() => {
     console.log('~~~~~ searchParams: ', searchParams);
+
     setSelectTags(
       searchParams.tags
         ? optionsTags.find((o) => o.value[0] === searchParams.tags[0])
@@ -101,6 +102,7 @@ export default function HackerNav({
       // new search
       setSearchParamsNav({
         ...searchParams,
+        tags: searchParams.tags.filter((tag) => !tag.startsWith(Tags.AUTHOR)), // author rausfiltern, falls drin
         searchVariant: selectedOption.value,
       });
     }
@@ -114,6 +116,7 @@ export default function HackerNav({
       // todo numericFilters.map falls mehrere (-> nur CREATED_AT_I ersetzen)
       setSearchParamsNav({
         ...searchParams,
+        tags: searchParams.tags.filter((tag) => !tag.startsWith(Tags.AUTHOR)), // author rausfiltern, falls drin
         numericFilters: [
           NumericFilter.create(NumericFilters.CREATED_AT_I).greaterEqualThan(
             selectedOption.value

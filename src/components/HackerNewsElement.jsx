@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import Highlighter from 'react-highlight-words';
 import {
   FaLocationArrow,
@@ -7,6 +8,8 @@ import {
 } from 'react-icons/fa';
 
 export default function HackerNews({ news, gotoStory, gotoAuthor, query }) {
+  const navigate = useNavigate();
+
   const [showStory, setShowStory] = useState(false);
   const [fadeIn, setFadeIn] = useState(false);
 
@@ -127,7 +130,12 @@ export default function HackerNews({ news, gotoStory, gotoAuthor, query }) {
         <div>{ago()}</div>
         <div>|</div>
         {news.num_comments > 0 && (
-          <div className="news-div-infos-comments" onClick={showComments}>
+          <div
+            className="news-div-infos-comments"
+            onClick={() => {
+              navigate(`/story/${news.objectID}`);
+            }}
+          >
             {news.num_comments} comments
           </div>
         )}

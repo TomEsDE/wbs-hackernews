@@ -87,7 +87,18 @@ class HackerFetchApi {
     // tags -> author and storyid different
     // brackets mean 'OR'
     if (searchParams.tags.length) {
-      queryUrl += `&tags=(${searchParams.tags})`;
+      const isAuthor = searchParams.tags.find((tag) =>
+        tag.startsWith(Tags.AUTHOR)
+      );
+      console.log('isAuthor: ', isAuthor);
+
+      queryUrl += `&tags=${searchParams.tags}`;
+      // if (isAuthor) {
+      //   queryUrl += `&tags=${searchParams.tags}`;
+      // } else {
+      //   // mit Brackets -> OR search
+      //   queryUrl += `&tags=(${searchParams.tags})`;
+      // }
     }
 
     // numericFilters
@@ -173,7 +184,7 @@ class SearchParams {
   static query(query, searchParams = new SearchParams()) {
     const sp = searchParams;
 
-    // sp.tags = [Tags.STORY]; // todo sollte von ui kommen
+    sp.tags = sp.tags.filter((tag) => !tag.startsWith(Tags.AUTHOR)); // todo
     sp.query = query;
     sp.page = 0;
 
