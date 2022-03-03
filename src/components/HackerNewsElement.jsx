@@ -99,7 +99,7 @@ export default function HackerNews({ news, gotoStory, gotoAuthor, query }) {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <FaLocationArrow size={20} />
+            <FaLocationArrow className="arrow" size={20} />
           </a>
         )}
         {news.story_text && (

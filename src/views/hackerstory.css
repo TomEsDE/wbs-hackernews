@@ -6,7 +6,7 @@
   display: flex;
   gap: 5px;
   align-items: center;
-  font-size: smaller;
+  font-size: 8pt;
   color: blueviolet;
 }
 
@@ -21,25 +21,38 @@
 .story-subtitle {
   display: flex;
   justify-content: space-between;
+  font-style: italic;
+  font-size: 10pt;
+  color: gray;
 }
 
 .story-link {
-  font-size: smaller;
+  font-size: 10pt;
+}
+
+.story-date-div {
+  display: flex;
 }
 
 .story-date {
   font-style: italic;
-  font-size: smaller;
+  /* font-size: 10pt; */
   color: gray;
 }
 
 .story-text {
-  font-size: smaller;
+  font-size: small;
+}
+
+.comments-label {
+  font-size: larger;
+  font-weight: bold;
+  padding-top: 1rem;
 }
 
 .comments-div {
   padding-top: 1rem;
-  font-size: smaller;
+  font-size: small;
 }
 
 .comments {
@@ -60,9 +73,15 @@
   margin-bottom: 0.4rem;
 }
 
+.comment-info-div {
+  display: flex;
+  gap: 5px;
+  align-items: flex-end;
+}
+
 .comment-date {
   font-style: italic;
-  font-size: smaller;
+  font-size: 8pt;
   color: gray;
   /* text-align: right; */
   /* padding-right: 0.2rem; */

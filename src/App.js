@@ -9,6 +9,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<HackerNews />} />
+        <Route path="/news/:author" element={<HackerNews />} />
         <Route path="/story/:id" element={<HackerStory />} />
         <Route path="*" element={<ErrorPage />} />
       </Routes>

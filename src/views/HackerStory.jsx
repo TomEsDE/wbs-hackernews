@@ -54,8 +54,20 @@ export default function HackerStory() {
         <>
           <div className="story-title">{story.title}</div>
           <div className="story-subtitle">
-            <div className="story-date">
-              {new Date(story.created_at).toLocaleString()}
+            <div className="story-date-div">
+              <div className="story-date">
+                {new Date(story.created_at).toLocaleString()}
+              </div>
+              <div style={{ fontWeight: 'bold' }}>, {story.points} Points</div>
+
+              <div
+                className="story-date cursor"
+                onClick={() => {
+                  navigate(`/news/${story.author}`);
+                }}
+              >
+                , {story.author}
+              </div>
             </div>
 
             {story.url && (
@@ -73,9 +85,12 @@ export default function HackerStory() {
           )}
 
           {story.children && (
-            <div className="comments-div">
-              <Comments commentList={story.children} />
-            </div>
+            <>
+              <div className="comments-label">Comments</div>
+              <div className="comments-div">
+                <Comments commentList={story.children} />
+              </div>
+            </>
           )}
         </>
       )}
