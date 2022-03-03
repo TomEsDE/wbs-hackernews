@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { FaSpinner } from 'react-icons/fa';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { SearchParams } from '../js/fetchApi';
 import HackerNav from './HackerNav';
 import HackerNews from './HackerNewsElement';
@@ -12,7 +12,6 @@ import Pagination from './Pagination';
  * @returns
  */
 export default function HackerNewsList({ _api }) {
-  const navigate = useNavigate();
   const { author } = useParams();
 
   // const _api = new HackerFetchApi();

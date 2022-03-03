@@ -199,8 +199,12 @@ class SearchParams {
     return sp;
   }
 
-  static author(author, searchParams, showComments = false) {
-    const sp = { ...searchParams }; // clone wegen useState
+  static author(
+    author,
+    searchParams = new SearchParams(),
+    showComments = false
+  ) {
+    const sp = searchParams ? { ...searchParams } : new SearchParams(); // clone wegen useState
     // sp.query = query;
     // sp.query = '';
     sp.tags = [

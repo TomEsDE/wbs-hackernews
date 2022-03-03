@@ -1,31 +1,14 @@
-import React, { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import Highlighter from 'react-highlight-words';
-import {
-  FaLocationArrow,
-  FaLongArrowAltDown,
-  FaRegArrowAltCircleDown,
-} from 'react-icons/fa';
 import { Duration } from 'luxon';
+import { useState } from 'react';
+import Highlighter from 'react-highlight-words';
+import { FaLocationArrow } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 export default function HackerNews({ news, gotoStory, gotoAuthor, query }) {
   const navigate = useNavigate();
 
   const [showStory, setShowStory] = useState(false);
   const [fadeIn, setFadeIn] = useState(false);
-
-  function handleShowNews(event) {
-    event.preventDefault();
-    // console.log('handleShowNews >> id: ', news.objectID);
-    // console.log('url: ', news.url);
-
-    gotoStory(news.objectID);
-  }
-
-  function showComments(event) {
-    console.log('showComments');
-    gotoStory(news.objectID);
-  }
 
   function showAuthor(event) {
     gotoAuthor(news.author);
