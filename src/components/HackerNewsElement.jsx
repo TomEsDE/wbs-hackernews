@@ -89,18 +89,36 @@ export default function HackerNews({ news, gotoStory, gotoAuthor, query }) {
     );
   }
 
+  function getUrl() {
+    if (news.url) return news.url;
+    else return news.story_url;
+  }
+
   return (
     <div className="news-div">
       <div className="news-div-link-div">
-        {news.url && (
+        {news.url && getUrl() && (
           <a
             className="news-div-link-origin"
-            href={news.url}
+            href={getUrl()}
             target="_blank"
             rel="noopener noreferrer"
+            title="open external link"
           >
             <FaLocationArrow className="arrow" size={20} />
           </a>
+        )}
+
+        {news.comment_text && (
+          <div
+            className="news-div-link-origin"
+            onClick={() => {
+              navigate(`/story/${news.story_id}`);
+            }}
+            title="goto Story"
+          >
+            <FaLocationArrow className="arrow" size={20} />
+          </div>
         )}
         {news.story_text && (
           <div
@@ -108,6 +126,7 @@ export default function HackerNews({ news, gotoStory, gotoAuthor, query }) {
             onClick={showStoryText}
             target="_blank"
             rel="noopener noreferrer"
+            title="show story text"
           >
             <FaLocationArrow className="arrow-turn" size={20} />
           </div>
@@ -136,27 +155,32 @@ export default function HackerNews({ news, gotoStory, gotoAuthor, query }) {
         )} */}
       </div>
       <div className="news-div-infos">
-        <div>
-          {news.points} point{news.points > 1 ? 's' : ''}
-        </div>
-        <div>|</div>
+        {news.title && (
+          <>
+            <div>
+              {news.points} point{news.points > 1 ? 's' : ''}
+            </div>
+            <div>|</div>
+          </>
+        )}
         <div className="news-div-infos-comments" onClick={showAuthor}>
           {news.author}
         </div>
         <div>|</div>
         <div>{ago()}</div>
-        <div>|</div>
         {news.num_comments > 0 && (
-          <div
-            className="news-div-infos-comments"
-            onClick={() => {
-              navigate(`/story/${news.objectID}`);
-            }}
-          >
-            {news.num_comments} comments
-          </div>
+          <>
+            <div>|</div>
+            <div
+              className="news-div-infos-comments"
+              onClick={() => {
+                navigate(`/story/${news.objectID}`);
+              }}
+            >
+              {news.num_comments} comments
+            </div>
+          </>
         )}
-        {!news.num_comments && <div>{news.num_comments} comments</div>}
       </div>
       {showStory && (
         <div

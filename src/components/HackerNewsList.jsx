@@ -1,9 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { FaSpinner } from 'react-icons/fa';
 import { useNavigate, useParams } from 'react-router-dom';
 import { SearchParams } from '../js/fetchApi';
 import HackerNav from './HackerNav';
 import HackerNews from './HackerNewsElement';
-import { FaSpinner } from 'react-icons/fa';
 import Pagination from './Pagination';
 
 /**
@@ -97,7 +97,7 @@ export default function HackerNewsList({ _api }) {
   }
 
   async function gotoAuthor(author, showComments = false) {
-    console.log('gotoAuthor >>> author: ', author);
+    console.log('gotoAuthor >>> author: ', searchParams);
     setSearchParams(SearchParams.author(author, searchParams, showComments)); // -> useEffect
   }
 

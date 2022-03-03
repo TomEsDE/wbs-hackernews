@@ -184,7 +184,7 @@ class SearchParams {
   static query(query, searchParams = new SearchParams()) {
     const sp = searchParams;
 
-    sp.tags = sp.tags.filter((tag) => !tag.startsWith(Tags.AUTHOR)); // todo
+    // sp.tags = sp.tags.filter((tag) => !tag.startsWith(Tags.AUTHOR)); // todo
     sp.query = query;
     sp.page = 0;
 
@@ -200,9 +200,9 @@ class SearchParams {
   }
 
   static author(author, searchParams, showComments = false) {
-    const sp = new SearchParams(); // clone wegen useState
+    const sp = { ...searchParams }; // clone wegen useState
     // sp.query = query;
-    sp.query = '';
+    // sp.query = '';
     sp.tags = [
       showComments ? Tags.COMMENT : Tags.STORY,
       `${Tags.AUTHOR}${author}`,
