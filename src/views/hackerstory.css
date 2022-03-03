@@ -1,3 +1,90 @@
 .hackerstory-div {
   padding: 1rem;
 }
+
+.story-back {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  font-size: 8pt;
+  color: blueviolet;
+}
+
+.story-title {
+  padding: 0.6rem;
+  text-align: center;
+  font-size: x-large;
+  color: wheat;
+  background: linear-gradient(to left top, coral, purple);
+}
+
+.story-subtitle {
+  display: flex;
+  justify-content: space-between;
+  font-style: italic;
+  font-size: 10pt;
+  color: gray;
+}
+
+.story-link {
+  font-size: 10pt;
+}
+
+.story-date-div {
+  display: flex;
+}
+
+.story-date {
+  font-style: italic;
+  /* font-size: 10pt; */
+  color: gray;
+}
+
+.story-text {
+  font-size: small;
+}
+
+.comments-label {
+  font-size: larger;
+  font-weight: bold;
+  padding-top: 1rem;
+}
+
+.comments-div {
+  padding-top: 1rem;
+  font-size: small;
+}
+
+.comments {
+  padding-left: 1.5rem;
+}
+
+.comment-div {
+  border-bottom: 1px dashed lightgray;
+}
+
+.comment {
+  display: flex;
+  gap: 5px;
+}
+
+.comment p {
+  margin: 0.1rem;
+  margin-bottom: 0.4rem;
+}
+
+.comment-info-div {
+  display: flex;
+  gap: 5px;
+  align-items: flex-end;
+}
+
+.comment-date {
+  font-style: italic;
+  font-size: 8pt;
+  color: gray;
+  /* text-align: right; */
+  /* padding-right: 0.2rem; */
+  padding-left: 1.8rem;
+  padding-top: 0.2rem;
+}

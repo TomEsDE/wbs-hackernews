@@ -3,15 +3,16 @@
   ✔ story and comment mixed @done(22-03-01 23:36)
   ✔ by date, by popularity (-> should be default search) @done(22-03-01 23:36)
   ✔ last week, month etc (-> createt_at_i) @done(22-03-01 23:36)
-☐ router 
-  ☐ story view (getitem request)
+✔ router @done(22-03-03 11:41)
+  ✔ story view (getitem request) @done(22-03-03 11:41)
 ☐ material ui
 
 ✔ comments -> conditional rendering @done(22-03-02 11:30)
+  ✔ ! link to story @done(22-03-03 21:52)
 
-☐ mark/highlight searched text 
+✔ mark/highlight searched text @done(22-03-02 17:37)
   ✔ in stories and @done(22-03-02 11:30)
-  ☐ comments (big one)
+  ✔ comments (big one... ez thx to Olin) @done(22-03-02 15:15)
 
 ✔ ago() -> minutes, hours, days, weeks, months, years... @done(22-03-01 18:17)
 
@@ -21,3 +22,5 @@
 ☐ spinner spinning
 
 ✔ SearchParam Class in api @done(22-03-01 10:57)
+
+✔ ! wenn author -> oben (in nav zB) wegklickbares feld anzeigen (very nice to have) @done(22-03-03 15:49)

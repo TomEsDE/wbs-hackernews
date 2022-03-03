@@ -1,8 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { FaSpinner } from 'react-icons/fa';
+import { useNavigate, useParams } from 'react-router-dom';
 import { SearchParams } from '../js/fetchApi';
 import HackerNav from './HackerNav';
 import HackerNews from './HackerNewsElement';
-import { FaSpinner } from 'react-icons/fa';
 import Pagination from './Pagination';
 
 /**
@@ -11,9 +12,12 @@ import Pagination from './Pagination';
  * @returns
  */
 export default function HackerNewsList({ _api }) {
+  const navigate = useNavigate();
+  const { author } = useParams();
+
   // const _api = new HackerFetchApi();
   const [newsList, setNewsList] = useState(null);
-  const [searchParams, setSearchParams] = useState(SearchParams.default());
+  const [searchParams, setSearchParams] = useState(null);
   const [error, setError] = useState(null);
 
   async function loadData() {
@@ -24,6 +28,8 @@ export default function HackerNewsList({ _api }) {
     // _api?.getMockData(1000).then((data) => setNewsList(data));
 
     // ! real data
+    if (!searchParams) return;
+
     try {
       setError(null);
       const data = await _api.search(searchParams);
@@ -34,6 +40,17 @@ export default function HackerNewsList({ _api }) {
       setError(error);
     }
   }
+
+  // load data initially
+  useEffect(() => {
+    // ! Vorsicht infinite
+    // console.log('--------- searchParams', searchParams);
+    if (author) {
+      gotoAuthor(author, true);
+    } else {
+      setSearchParams(SearchParams.default());
+    }
+  }, []);
 
   // load data initially
   useEffect(() => {
@@ -79,9 +96,9 @@ export default function HackerNewsList({ _api }) {
     // ...
   }
 
-  async function gotoAuthor(author) {
-    console.log('gotoAuthor >>> author: ', author);
-    setSearchParams(SearchParams.author(author, searchParams)); // -> useEffect
+  async function gotoAuthor(author, showComments = false) {
+    console.log('gotoAuthor >>> author: ', searchParams);
+    setSearchParams(SearchParams.author(author, searchParams, showComments)); // -> useEffect
   }
 
   return (
@@ -95,14 +112,14 @@ export default function HackerNewsList({ _api }) {
 
       <Pagination
         key="1"
-        page={searchParams.page}
+        page={searchParams?.page}
         nbPages={newsList?.nbPages}
         hitsPerPage={newsList?.hitsPerPage}
         setPage={setPage}
       />
       {error && <div className="error">{error.message}</div>}
       {newsList && newsList.hits.length === 0 && (
-        <div className="noresult">Keine Suchergebnis</div>
+        <div className="noresult">No Results</div>
       )}
 
       {!newsList && !error && (
@@ -119,13 +136,13 @@ export default function HackerNewsList({ _api }) {
               news={news}
               gotoStory={gotoStory}
               gotoAuthor={gotoAuthor}
-              query={searchParams.query}
+              query={searchParams?.query}
             />
           </>
         ))}
       <Pagination
         key="2"
-        page={searchParams.page}
+        page={searchParams?.page}
         nbPages={newsList?.nbPages}
         hitsPerPage={newsList?.hitsPerPage}
         setPage={setPage}

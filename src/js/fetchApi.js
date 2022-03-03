@@ -184,7 +184,7 @@ class SearchParams {
   static query(query, searchParams = new SearchParams()) {
     const sp = searchParams;
 
-    sp.tags = sp.tags.filter((tag) => !tag.startsWith(Tags.AUTHOR)); // todo
+    // sp.tags = sp.tags.filter((tag) => !tag.startsWith(Tags.AUTHOR)); // todo
     sp.query = query;
     sp.page = 0;
 
@@ -199,15 +199,18 @@ class SearchParams {
     return sp;
   }
 
-  static author(author, searchParams) {
-    const sp = new SearchParams(); // clone wegen useState
+  static author(author, searchParams, showComments = false) {
+    const sp = { ...searchParams }; // clone wegen useState
     // sp.query = query;
-    sp.query = '';
-    sp.tags = [Tags.STORY, `${Tags.AUTHOR}${author}`];
+    // sp.query = '';
+    sp.tags = [
+      showComments ? Tags.COMMENT : Tags.STORY,
+      `${Tags.AUTHOR}${author}`,
+    ];
     // sp.numericFilters = searchParams.numericFilters;
     sp.numericFilters = [
       NumericFilter.create(NumericFilters.CREATED_AT_I).greaterEqualThan(
-        TimesInSeconds.YEAR
+        TimesInSeconds.MONTH
       ),
     ];
     sp.page = 0;

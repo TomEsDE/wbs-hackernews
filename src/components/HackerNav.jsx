@@ -45,11 +45,11 @@ export default function HackerNav({
   const [selectTags, setSelectTags] = useState();
   const [selectVariant, setSelectVariant] = useState();
   const [selectDate, setSelectDate] = useState();
-
-  // const searchParams = SearchParams.default();
+  const [author, setAuthor] = useState(false);
 
   useEffect(() => {
     console.log('~~~~~ searchParams: ', searchParams);
+    if (!searchParams) return;
 
     setSelectTags(
       searchParams.tags
@@ -77,6 +77,8 @@ export default function HackerNav({
           )
         : optionsDate[0]
     );
+
+    setAuthor(searchParams.tags.find((tag) => tag.startsWith(Tags.AUTHOR)));
   }, [searchParams]);
 
   function handleQueryChange({ target }) {
@@ -90,7 +92,7 @@ export default function HackerNav({
       // new search
       setSearchParamsNav({
         ...searchParams,
-        tags: selectedOption.value,
+        tags: author ? [...selectedOption.value, author] : selectedOption.value,
       });
     }
   }
@@ -102,7 +104,9 @@ export default function HackerNav({
       // new search
       setSearchParamsNav({
         ...searchParams,
-        tags: searchParams.tags.filter((tag) => !tag.startsWith(Tags.AUTHOR)), // author rausfiltern, falls drin
+        tags: searchParams.tags.filter(
+          (tag) => author || !tag.startsWith(Tags.AUTHOR)
+        ), // author rausfiltern, falls drin
         searchVariant: selectedOption.value,
       });
     }
@@ -116,7 +120,9 @@ export default function HackerNav({
       // todo numericFilters.map falls mehrere (-> nur CREATED_AT_I ersetzen)
       setSearchParamsNav({
         ...searchParams,
-        tags: searchParams.tags.filter((tag) => !tag.startsWith(Tags.AUTHOR)), // author rausfiltern, falls drin
+        tags: searchParams.tags.filter(
+          (tag) => author || !tag.startsWith(Tags.AUTHOR)
+        ), // author rausfiltern, falls drin
         numericFilters: [
           NumericFilter.create(NumericFilters.CREATED_AT_I).greaterEqualThan(
             selectedOption.value
@@ -130,6 +136,18 @@ export default function HackerNav({
     event.preventDefault();
     // -> parent
     setQuery(queryInput);
+  }
+
+  function handleRemoveAuthor() {
+    setAuthor(null);
+    setSearchParamsNav({
+      ...searchParams,
+      tags: searchParams.tags.filter((tag) => !tag.startsWith(Tags.AUTHOR)), // author rausfiltern, falls drin
+    });
+  }
+
+  function numberWithCommas(x) {
+    return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',');
   }
 
   return (
@@ -183,8 +201,21 @@ export default function HackerNav({
           />
           {/* <button onClick={testSelectChange}>Test Select Change</button> */}
         </div>
-        {newsList && <div>{newsList.nbHits} results</div>}
+        {newsList && <div>{numberWithCommas(newsList.nbHits)} results</div>}
       </div>
+      {author && (
+        <div className="hacker-nav-filters-active">
+          <div className="hacker-nav-filter-active">
+            <div>{author.replace('_', ': ')}</div>
+            <button
+              onClick={handleRemoveAuthor}
+              className="hacker-nav-filter-remove"
+            >
+              X
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

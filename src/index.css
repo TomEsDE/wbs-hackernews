@@ -1,3 +1,9 @@
+:root {
+  --font-playfair: 'Playfair Display', serif;
+  --font-roboto: 'Roboto', sans-serif;
+  --font-raleway: 'Raleway', sans-serif;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -7,9 +13,80 @@ body {
   -moz-osx-font-smoothing: grayscale;
 
   background: lightgoldenrodyellow;
+
+  font-family: var(--font-raleway);
+
+  padding: 1rem 2vw;
+  margin: 0 auto;
+  max-width: 70rem;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.arrow {
+  transition: all ease 0.3s;
+}
+
+.arrow:hover {
+  transform: scale(1.5);
+}
+
+.arrow-turn {
+  transform: rotate(135deg);
+  margin-right: 0.5rem;
+  transition: all ease 0.3s;
+}
+
+.arrow-turn:hover {
+  /* transform: rotate(135deg); */
+  transform: rotate(135deg) scale(1.5);
+}
+
+.div-fade-in {
+  opacity: 0;
+  transition: opacity 1s;
+}
+
+.fade-in {
+  opacity: 1;
+}
+
+.error {
+  font-size: xx-large;
+  color: red;
+  padding: 2rem;
+  height: calc(100vh - 300px);
+  text-shadow: 1px 1px 0px black;
+}
+
+.noresult {
+  font-size: xx-large;
+  color: orange;
+  padding: 2rem;
+  height: calc(100vh - 300px);
+  text-shadow: 1px 1px 0px black;
+}
+
+.cursor {
+  cursor: pointer;
+}
+
+.cursor:hover {
+  color: cornflowerblue;
+}
+
+.divider {
+  color: lightgray;
+  padding-top: 0.2rem;
+}
+
+.loading-symbol {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: calc(100vh - 300px);
 }

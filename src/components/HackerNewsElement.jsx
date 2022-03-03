@@ -6,6 +6,7 @@ import {
   FaLongArrowAltDown,
   FaRegArrowAltCircleDown,
 } from 'react-icons/fa';
+import { Duration } from 'luxon';
 
 export default function HackerNews({ news, gotoStory, gotoAuthor, query }) {
   const navigate = useNavigate();
@@ -41,43 +42,83 @@ export default function HackerNews({ news, gotoStory, gotoAuthor, query }) {
   }
 
   /**
-   * todo conversion wrong
-   * @returns
+   * @returns wie lang liegt die News zurueck
    */
   function ago() {
     const diffMs = new Date() - new Date(news.created_at_i * 1000);
 
-    const diffMins = Math.round(diffMs / 60000);
-    const diffHours = Math.round(diffMs / 60000 / 60);
-    const diffDays = Math.round(diffMs / 60000 / 60 / 24);
-    const diffMonth = Math.round(diffMs / 60000 / 60 / 24 / 30);
-    const diffYears = Math.round(diffMs / 60000 / 60 / 24 / 30 / 12);
+    // luxon lib -> thx to Martin!
+    const dur = Duration.fromMillis(diffMs);
 
-    if (diffYears >= 1) {
-      return `${diffYears} year${diffYears > 1 ? 's' : ''} ago`;
-    } else if (diffMonth >= 1) {
-      return `${diffMonth} month ago`;
-    } else if (diffDays >= 1) {
-      return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
-    } else if (diffHours >= 1) {
-      return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
-    } else {
-      return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`;
+    const periods = ['year', 'month', 'day', 'hour', 'minute'];
+
+    let returnText = 'ago';
+
+    for (let idx in periods) {
+      // console.log('period: ', periods[idx]);
+      const periodDur = Math.round(dur.as(periods[idx] + 's'));
+      // console.log('periodDur: ', periodDur);
+      if (periodDur >= 1) {
+        returnText = `${periodDur} ${periods[idx]}${
+          periodDur > 1 ? 's' : ''
+        } ago`;
+        break;
+      }
     }
+
+    return returnText;
+  }
+
+  /**
+   * danke Olin :P
+   *
+   * @param {} str
+   * @returns
+   */
+  function addHighlightsToString(str) {
+    if (query) {
+      const r = new RegExp(`(${query})`, 'ig');
+      str = str.replaceAll(r, `<span class="highlightQueryWords">$&</span>`);
+    }
+
+    return (
+      <div
+        className="news-div-comment"
+        dangerouslySetInnerHTML={{ __html: str }}
+      ></div>
+    );
+  }
+
+  function getUrl() {
+    if (news.url) return news.url;
+    else return news.story_url;
   }
 
   return (
     <div className="news-div">
       <div className="news-div-link-div">
-        {news.url && (
+        {news.url && getUrl() && (
           <a
             className="news-div-link-origin"
-            href={news.url}
+            href={getUrl()}
             target="_blank"
             rel="noopener noreferrer"
+            title="open external link"
           >
-            <FaLocationArrow size={20} />
+            <FaLocationArrow className="arrow" size={20} />
           </a>
+        )}
+
+        {news.comment_text && (
+          <div
+            className="news-div-link-origin"
+            onClick={() => {
+              navigate(`/story/${news.story_id}`);
+            }}
+            title="goto Story"
+          >
+            <FaLocationArrow className="arrow" size={20} />
+          </div>
         )}
         {news.story_text && (
           <div
@@ -85,61 +126,61 @@ export default function HackerNews({ news, gotoStory, gotoAuthor, query }) {
             onClick={showStoryText}
             target="_blank"
             rel="noopener noreferrer"
+            title="show story text"
           >
             <FaLocationArrow className="arrow-turn" size={20} />
           </div>
         )}
         {news.title && (
-          <Highlighter
-            highlightClassName="news-div-title highlightQueryWords"
-            searchWords={[query]}
-            autoEscape={true}
-            // textToHighlight={{ __html: news.comment_text }}
-            textToHighlight={news.title}
-          />
-          // <div className="news-div-title" onClick={handleShowNews}>
-          //   {news?.title}
-          // </div>
+          <div className="news-div-title">
+            <Highlighter
+              onClick={() => {
+                navigate(`/story/${news.objectID}`);
+              }}
+              highlightClassName="highlightQueryWords"
+              searchWords={[query]}
+              autoEscape={true}
+              textToHighlight={news.title}
+            />
+          </div>
         )}
 
-        {news.comment_text && (
-          // <>
-          //   <Highlighter
-          //     highlightClassName="highlightQueryWords"
-          //     searchWords={[query]}
-          //     autoEscape={true}
-          //     // textToHighlight={{ __html: news.comment_text }}
-          //     textToHighlight={news.comment_text}
-          //   />
-          // </>
+        {news.comment_text && addHighlightsToString(news.comment_text)}
+
+        {/* {news.comment_text && (
           <div
             className="news-div-comment"
             dangerouslySetInnerHTML={{ __html: news.comment_text }}
           ></div>
-        )}
+        )} */}
       </div>
       <div className="news-div-infos">
-        <div>
-          {news.points} point{news.points > 1 ? 's' : ''}
-        </div>
-        <div>|</div>
+        {news.title && (
+          <>
+            <div>
+              {news.points} point{news.points > 1 ? 's' : ''}
+            </div>
+            <div>|</div>
+          </>
+        )}
         <div className="news-div-infos-comments" onClick={showAuthor}>
           {news.author}
         </div>
         <div>|</div>
         <div>{ago()}</div>
-        <div>|</div>
         {news.num_comments > 0 && (
-          <div
-            className="news-div-infos-comments"
-            onClick={() => {
-              navigate(`/story/${news.objectID}`);
-            }}
-          >
-            {news.num_comments} comments
-          </div>
+          <>
+            <div>|</div>
+            <div
+              className="news-div-infos-comments"
+              onClick={() => {
+                navigate(`/story/${news.objectID}`);
+              }}
+            >
+              {news.num_comments} comments
+            </div>
+          </>
         )}
-        {!news.num_comments && <div>{news.num_comments} comments</div>}
       </div>
       {showStory && (
         <div
