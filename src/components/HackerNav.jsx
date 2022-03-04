@@ -41,7 +41,7 @@ export default function HackerNav({
   setSearchParamsNav,
 }) {
   // const searchParams = SearchParams.default(); // ! debug
-  const [queryInput, setQueryInput] = useState('');
+  const [queryInput, setQueryInput] = useState(null);
 
   const [selectTags, setSelectTags] = useState();
   const [selectVariant, setSelectVariant] = useState();
@@ -81,6 +81,16 @@ export default function HackerNav({
 
     setAuthor(searchParams.tags.find((tag) => tag.startsWith(Tags.AUTHOR)));
   }, [searchParams]);
+
+  useEffect(() => {
+    if (!queryInput) return;
+
+    // time delay, damit fetch nicht zu schnell ausgefuehrt wird
+    const timer = setTimeout(() => {
+      setQuery(queryInput);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [queryInput]);
 
   function handleQueryChange({ target }) {
     setQueryInput(target.value);
