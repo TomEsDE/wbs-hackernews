@@ -8,6 +8,7 @@ import {
   Tags,
   TimesInSeconds,
 } from '../js/fetchApi';
+import logo from '../img/hacker-icon.png';
 
 const optionsTags = [
   { value: [Tags.STORY], label: 'Story' },
@@ -153,7 +154,11 @@ export default function HackerNav({
   return (
     <div className="header">
       <div className="headernav-div">
-        <div className="header-logo">H</div>
+        <div>
+          <div className="header-logo-text">Hacker</div>
+          <img className="header-logo" src={logo} alt="Logo" />
+          <div className="header-logo-text">News</div>
+        </div>
         <form
           className="header-search-form"
           action="#"
@@ -178,27 +183,33 @@ export default function HackerNav({
       </div>
       <div className="hacker-nav-filter-div">
         <div className="hacker-nav-filter">
-          <div>Search </div>
-          <Select
-            className="hacker-nav-filter-select"
-            onChange={handleFilterTagChange}
-            options={optionsTags}
-            value={selectTags}
-          />
-          <div> by </div>
-          <Select
-            className="hacker-nav-filter-select"
-            onChange={handleFilterVariantChange}
-            options={optionsVariant}
-            value={selectVariant}
-          />
-          <div> for </div>
-          <Select
-            className="hacker-nav-filter-select"
-            onChange={handleFilterDateChange}
-            options={optionsDate}
-            value={selectDate}
-          />
+          <div className="hacker-nav-filter-block">
+            <div>Search </div>
+            <Select
+              className="hacker-nav-filter-select"
+              onChange={handleFilterTagChange}
+              options={optionsTags}
+              value={selectTags}
+            />
+          </div>
+          <div className="hacker-nav-filter-block">
+            <div> by </div>
+            <Select
+              className="hacker-nav-filter-select"
+              onChange={handleFilterVariantChange}
+              options={optionsVariant}
+              value={selectVariant}
+            />
+          </div>
+          <div className="hacker-nav-filter-block">
+            <div> for </div>
+            <Select
+              className="hacker-nav-filter-select"
+              onChange={handleFilterDateChange}
+              options={optionsDate}
+              value={selectDate}
+            />
+          </div>
           {/* <button onClick={testSelectChange}>Test Select Change</button> */}
         </div>
         {newsList && <div>{numberWithCommas(newsList.nbHits)} results</div>}
