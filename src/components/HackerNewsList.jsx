@@ -54,12 +54,7 @@ export default function HackerNewsList({ _api }) {
   // load data initially
   useEffect(() => {
     // ! Vorsicht infinite
-
     loadData();
-    // const timer = setTimeout(() => {
-    //   loadData();
-    // }, 500);
-    // return () => clearTimeout(timer);
     // console.log('--------- searchParams', searchParams);
   }, [searchParams]);
 
