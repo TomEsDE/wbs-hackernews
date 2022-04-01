@@ -2,7 +2,7 @@ import mock from './hackernews.json';
 
 class HackerFetchApi {
   // todo ENV
-  constructor(url = 'http://hn.algolia.com/api/v1/') {
+  constructor(url = 'https://hn.algolia.com/api/v1/') {
     this.url = url;
   }
 
